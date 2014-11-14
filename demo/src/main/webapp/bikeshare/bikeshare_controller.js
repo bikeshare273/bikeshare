@@ -107,9 +107,7 @@ var bikeshareapp = angular.module('bikeshareapp', ['ngRoute', 'ngResource']);
            };
             var response = $http.post("../../api/v1/users", data, {});
                response.success(function(dataFromServer, status, headers, config) {
-                  console.log("bhen"+dataFromServer.message);
                   if(dataFromServer.message == null || dataFromServer.message == ""){
-                    console.log("sala ithe");
                      $scope.signupform_success = "User created successfully";
                   }else{
                     $scope.signupform_error = dataFromServer.message;
