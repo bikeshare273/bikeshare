@@ -17,7 +17,8 @@ public class MongodbConnection {
 			uri = new MongoClientURI("mongodb://bikeshare:sithu13@ds051170.mongolab.com:51170/bikeshare");
 			mongoclient = new MongoClient(uri);
 			mongoConnection = new MongoTemplate(mongoclient,"bikeshare");
-		} catch (UnknownHostException e) {
+		} catch (UnknownHostException e) 
+		{
 			e.printStackTrace();
 		} catch (Exception e){
 			e.printStackTrace();

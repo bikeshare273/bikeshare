@@ -30,7 +30,7 @@ public class UserDAOImpl {
 	}
 
 	public void removeObject(String id) {
-		mongoTemplate.remove(new Query((Criteria.where("_id").is(id))), User.class);
+		mongoTemplate.remove(new Query((Criteria.where("_id").is(id))), User.class);	
 		
 	}
 
