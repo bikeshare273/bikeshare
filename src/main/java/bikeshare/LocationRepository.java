@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
-
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.MongoClient;
@@ -54,17 +53,18 @@ public class LocationRepository
 
 
 
-	public Location findById(String user_id) 
+	public Location findById(String location_id) 
 	{
-		return mongoTemplate.findById(user_id, Location.class,COLLECTION_NAME);
+		return mongoTemplate.findById(location_id, Location.class,COLLECTION_NAME);
 	}
 
 
 
-	public void save(Location user) 
+	public void save(Location loc) 
 	{
-		mongoTemplate.save(user,COLLECTION_NAME);
+		mongoTemplate.save(loc,COLLECTION_NAME);
 	}
-
+	
+	
 }
 

@@ -1,9 +1,14 @@
 package bikeshare;
 
+import java.util.ArrayList;
+
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Location 
 {
+	
 	String id;
 	
 	@NotEmpty (message = "Required Field. Please provide the latitude.")
@@ -21,6 +26,17 @@ public class Location
 	@NotEmpty (message = "Required Field. Please provide the zipcode.")
 	private String zipcode;
 
+	ArrayList<Bike> bList = new ArrayList<Bike>();
+	
+	@JsonIgnore
+	public ArrayList<Bike> getbList() {
+		return bList;
+	}
+
+	public void setbList(Bike bList) {
+		this.bList.add(bList);
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -88,4 +104,9 @@ public class Location
 		this.state = loc.state;
 		this.zipcode = loc.zipcode;
 	}
+	
+		
+		
+    
+	
 }

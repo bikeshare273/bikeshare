@@ -1,5 +1,6 @@
 package bikeshare;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 
+
 @RestController
 @RequestMapping("/api/v1")
 public class LocationController 
@@ -28,9 +30,11 @@ public class LocationController
 	@Autowired
 	private LocationRepository locRepo;
 	
+	
+	// ---- Location ---
+	
 		//Post method
 		@RequestMapping(value="/location/", method=RequestMethod.POST)
-		//@ResponseStatus(HttpStatus.CREATED)
 		public ResponseEntity<Location> Location(@Valid @RequestBody Location set)
 		{
 				Location location_object = new Location();
@@ -74,6 +78,83 @@ public class LocationController
 		}
 		
 		
+		
+		// --- Bike ---
+		
+		
+		//Post
+		
+		@RequestMapping(value = "/location/{location_id}/bike", method = RequestMethod.POST)
+		public ResponseEntity<Bike> createBike(@PathVariable String location_id ,@Valid @RequestBody Bike set)
+		{
+			
+			Location location_object = locRepo.findById(location_id);
+			Bike bike_object = new Bike();
+			
+			if(location_object!=null)
+			{
+				bike_object.setBike(set);
+				location_object.setbList(bike_object);
+				locRepo.save(location_object);
+				return new ResponseEntity<Bike>(bike_object, HttpStatus.CREATED);
+			}
+			else
+			
+			return new ResponseEntity<Bike>(HttpStatus.NOT_FOUND);
+			
+		}
+		
+		
+		//Get Available Bikes
+		@RequestMapping(value = "/location/{location_id}/bike/available", method = RequestMethod.GET)
+		@ResponseStatus(HttpStatus.OK)
+		public ArrayList<Bike> getAvailableBike(@PathVariable String location_id)
+		{
+			ArrayList<Bike> arrayStatus= new ArrayList<Bike>();
+			Location location_object = locRepo.findById(location_id);
+			if(location_object!=null)
+			{
+				
+				String status = "Available";
+				
+				//System.out.println("In first if");
+				for(Bike e : location_object.bList)
+				{
+					if(e.getStatus().equalsIgnoreCase(status))
+					{
+						
+						arrayStatus.add(e);
+					
+					}
+				
+					
+				}
+			}
+			return arrayStatus;
+		}
+		
+		//Get Reserved Bikes
+		@RequestMapping(value = "/location/{location_id}/bike/reserved", method = RequestMethod.GET)
+		@ResponseStatus(HttpStatus.OK)
+		public ArrayList<Bike> getReservedBike(@PathVariable String location_id)
+		{
+			String status = "Reserved";
+			ArrayList<Bike> arrayStatus = new ArrayList<Bike>();
+			Location location_object = locRepo.findById(location_id);
+			
+			for(Bike e : location_object.bList)
+			{
+				if(e.getStatus().equalsIgnoreCase(status))
+				{
+					arrayStatus.add(e);
+				}
+			}
+			
+			return arrayStatus;
+			
+		}
+		
+		
 		@ExceptionHandler({MethodArgumentNotValidException.class, ServletRequestBindingException.class})
 		@ResponseStatus(HttpStatus.BAD_REQUEST)
 		public ModelMap handleException(MethodArgumentNotValidException error)
@@ -87,5 +168,8 @@ public class LocationController
 			}
 			return errorMap;
 		}
+		
+
+		
 		
 }
