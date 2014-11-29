@@ -4,18 +4,17 @@
                   <div class="row">
                       <div class="col-md-6">
                       </div>
-                      <div class="login_container col-md-6">
+                      <div class="container login_container col-md-6">
                         <form>
-                          <div class="input-group input-group-lg username_textbox">
-                            <input type="text" class="form-control" placeholder="username" ng-model="loginform_username" ng-maxlength="30"/>
+                          <div class="username_textbox">
+                            <input type="text" class="form-control" placeholder="username" ng-model="loginform_username" ng-maxlength="30" autofocus/>
                           </div>
-                          <div class="input-group input-group-lg password_textbox">
+                          <div class="password_textbox">
                             <input type="text" class="form-control" placeholder="password" ng-model="loginform_password" ng-maxlength="20"/>
                           </div>
-                          <div class="input-group login_button">
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" ng-click="loginform_getAuthenticated()">login</button>
-                            </span>
+                          <div class="login_button">
+                              <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="loginform_getAuthenticated()">login</button>
+                            
                           </div>
                           <div class="register">
                           	<a href="#signup">Don't have account? Register Now !!!</a>

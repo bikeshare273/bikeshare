@@ -7,7 +7,7 @@ var bikeshareapp = angular.module('bikeshareapp', ['ngRoute', 'ngResource']);
 
             // route for the login page
             .when('/', {
-                templateUrl : 'login.html',
+                templateUrl : 'loginfinal.html',
                 controller  : 'loginController'
             })
 

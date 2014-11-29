@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-
-
-    <link rel= "stylesheet" href="../css/starter_template.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-     <script src="../angular/angular.js"></script>
-     <script src="../angular/angular-route.js"></script> 
-     <script src="../angular/angular-resource.js"></script>
-
-    <script src="../bikeshare_controller.js"></script>
-  </head>
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 
 
-  <body ng-app="bikeshareapp">
+<link type="text/css" href="../css/starter_template.css" rel="stylesheet">
 
-    <div ng-include src="'header.html'"></div> 
-    <div ng-view></div> 
-    <div ng-include src="'footer.html'"></div> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="../angular/angular.js"></script>
+<script src="../angular/angular-route.js"></script>
+<script src="../angular/angular-resource.js"></script>
+
+<script src="../bikeshare_controller.js"></script>
+
+</head>
 
 
-     <!-- Latest compiled and minified JavaScript -->
-      
-  </body>
+<body ng-app="bikeshareapp" class="mainform" onload="$('#myCarousel').carousel('next')">
+
+	<div ng-include src="'header1.html'"></div>
+	<div ng-view></div>
+	<div ng-include src="'footer.html'"></div>
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="../dist/js/bootstrap.min.js"></script>
+	
+</body>
 
 
 </html>

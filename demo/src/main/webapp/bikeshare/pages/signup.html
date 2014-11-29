@@ -1,57 +1,139 @@
-<div class="container-fluid login_box" ng-controller="signupformcontroller">
-          <div class="row">
-              <div class="col-xs-12 col-md-8">
-                  <div class="row">
-                      <div class="col-md-3">
-                      </div>
-                      <div class="login_container col-md-12">
-                        <form >
-                          <div class="input-group input-group-lg register_textbox">
-                            <input type="text" class="form-control" placeholder="Name" size="50" ng-model="signupform_name">
-                          </div>
-                          <div class="input-group input-group-lg  register_textbox">
-                            <input type="text" class="form-control" placeholder="Email" size="50" ng-model="signupform_email">
-                          </div>
-                           <div class="input-group input-group-lg  register_textbox">
-                            <input type="text" class="form-control" placeholder="Phone" size="50" ng-model="signupform_phone">
-                          </div>
-                           <div class="input-group input-group-lg  register_textbox">
-                            <input type="text" class="form-control" placeholder="Address" size="50" ng-model="signupform_address">
-                          </div>
-                           <div class="input-group input-group-lg  register_textbox">
-                            <input type="text" class="form-control" placeholder="Zipcode" size="50" ng-model="signupform_zipcode">
-                          </div>
-                           <!-- <div class="input-group input-group-lg  register_textbox">
+<div class="container-fluid signup_container" ng-controller="signupformcontroller">
+	<div class="col-md-12">
+		<form name="signupform">
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg register_textbox">
+
+					<input type="text" class="form-control" placeholder="Name"
+						name="signupform_name" size="50" ng-model="signupform_name"
+						ng-minlength="3" ng-maxlength="20" required>
+
+					<div class="error-container"
+						ng-show="signupform.signupform_name.$dirty && signupform.signupform_name.$invalid">
+						<small class="errorbox"
+							ng-show="signupform.signupform_name.$error.required">Name is required</small> <small class="errorbox"
+							ng-show="signupform.signupform_name.$error.minlength">Your
+							name is required to be at least 3 characters</small> <small
+							class="errorbox"
+							ng-show="signupform.signupform_name.$error.maxlength">Your
+							name cannot be longer than 20 characters</small> <small class="errorbox"
+							ng-show="signupform.signupform_name.$error.unique">That
+							name is taken, please try another</small>
+					</div>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  register_textbox">
+					<input type="email" class="form-control" placeholder="Email"
+						name="signupform_email" size="50" ng-model="signupform_email"
+						required>
+
+					<div class="error-container"
+						ng-show="signupform.signupform_email.$dirty && signupform.signupform_email.$invalid">
+						<small class="errorbox"
+							ng-show="signupform.signupform_email.$error.required">Email address is required</small> 
+							<small class="errorbox"
+							ng-show="signupform.signupform_email.$error.email">Email id is invalid</small>
+							<small class="errorbox"
+							ng-show="signupform.signupform_email.$error.unique">That
+							email is taken, please try another</small>
+					</div>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  register_textbox">
+					<input type="text" class="form-control" placeholder="Phone" name="signupform_phone" 
+						size="50" ng-model="signupform_phone" ng-minlength="10" ng-maxlength="10" required>
+					
+					<div class="error-container"
+						ng-show="signupform.signupform_phone.$dirty && signupform.signupform_phone.$invalid">
+							<small class="errorbox"
+							ng-show="signupform.signupform_phone.$error.required">Phone number is required</small> 
+							<small class="errorbox"
+							ng-show="signupform.signupform_phone.$error.minlength">Phone number is invalid</small>
+							<small class="errorbox"
+							ng-show="signupform.signupform_phone.$error.maxlength">Phone number is invalid</small>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  register_textbox">
+					<input type="text" class="form-control" placeholder="Address" name="signupform_address" 
+						size="50" ng-model="signupform_address" required>
+						
+					<div class="error-container"
+						ng-show="signupform.signupform_address.$dirty && signupform.signupform_address.$invalid">
+							<small class="errorbox"
+							ng-show="signupform.signupform_address.$error.required">Address is required</small> 
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  register_textbox">
+					<input type="text" class="form-control" placeholder="Zipcode" name="signupform_zipcode"
+						size="50" ng-model="signupform_zipcode" required>
+						
+					<div class="error-container"
+						ng-show="signupform.signupform_zipcode.$dirty && signupform.signupform_zipcode.$invalid">
+							<small class="errorbox"
+							ng-show="signupform.signupform_zipcode.$error.required">Zipcode is required</small> 
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  register_textbox" >
+					<input type="text" class="form-control" placeholder="Username" name="signupform_username"
+						size="50" ng-model="signupform_username" required>
+						
+					<div class="error-container"
+						ng-show="signupform.signupform_username.$dirty && signupform.signupform_username.$invalid">
+							<small class="errorbox"
+							ng-show="signupform.signupform_username.$error.required">Username is required</small> 
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  register_textbox">
+					<input type="text" class="form-control" placeholder="Password" name="signupform_password"
+						size="50" ng-model="signupform_password" required>
+						
+					<div class="error-container"
+						ng-show="signupform.signupform_password.$dirty && signupform.signupform_password.$invalid">
+							<small class="errorbox"
+							ng-show="signupform.signupform_password.$error.required">Password is required</small> 
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group register_button">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" ng-click="signupform_signup()">Register</button>
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="errorbox" style="position:relative;padding-top:1%;padding-left:47%;">
+					<ul>
+						<li ng-repeat="error in signupform_error">{{ error }}</li>
+					</ul>
+				</div>
+				<div class="successbox" style="position:relative;padding-top:1%;padding-left:47%;">{{signupform_success}}</div>
+			</div>
+			<!-- <div class="input-group input-group-lg  register_textbox">
                             <input type="text" class="form-control" placeholder="Credit Card Number" size="50">
                           </div> -->
-                           <div class="input-group input-group-lg  register_textbox">
-                            <input type="text" class="form-control" placeholder="Username" size="50" ng-model="signupform_username">
-                          </div>
-                           <div class="input-group input-group-lg  register_textbox">
-                            <input type="text" class="form-control" placeholder="Password" size="50" ng-model="signupform_password">
-                          </div>
-                          <div class="input-group register_button">
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" ng-click="signupform_signup()">Register</button>
-                            </span>
-                          </div>
-                          
-                          <div class="errorbox">
-                            <ul>
-                              <li ng-repeat="error in signupform_error">
-                                {{ error }}
-                              </li>
-                            </ul>
-                          </div>
-                          <div class="successbox">
-                            {{signupform_success}}
-                          </div>
 
-                        </form>
-                      </div>
-                      <div class="col-md-3">
-                      </div>
-                  </div>
-              </div>
-           </div>
-      </div>
+		</form>
+	</div>
+</div>

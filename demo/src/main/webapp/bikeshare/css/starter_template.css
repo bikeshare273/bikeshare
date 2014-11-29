@@ -4,45 +4,45 @@
     opacity: .5;
 }
 .login_box{
-	padding-top: 15%;
-	padding-left: 13%;
-	padding-bottom: 20%
+	padding-bottom: 20%;
+	background-color: #eee
 }
 .login_container{
-	padding-top: 5%;
-	padding-left: 5%;
-	border-style: solid;
-	border-color: black
+	background-color: #eee
 }
 .username_textbox{
-	padding-top: 5%;
-	padding-bottom: 3%
+	padding-top:10%;
+	padding-bottom: 1%;
 }
 .password_textbox{
-	padding-top: 5%;
-	padding-bottom: 2%
+	padding-top:1%;
+	padding-bottom: 1%;
 }
 .login_button{
-	padding-top: 5%;
-	padding-left: 14%
+	padding-top:1%;
+	padding-bottom: 1%
 }
 .footer{
-	padding-top: 50%;
+	clear: both;
+    position: relative;
+    margin-top: -3em;
 }
 .footer_container{
 	height: 100px;
 	 background: black;
 }
 .register{
-	padding-top: 5%;
+	padding-top: 2%;
+	margin-left:74%;
 	color:blue
 }
 .register_textbox{
-	padding-top: 5%;
+	padding-top: 2%;
 }
 .register_button{
 	padding-top: 5%;
 	padding-bottom: 5%;
+	margin-left:48%;
 }
 .errorbox{
 	color:red;
@@ -51,4 +51,10 @@
 .successbox{
 	color:green;
 	font-style: italic
+}
+.carousel_container{
+	padding-top:4%;
+}
+.signup_container{
+	padding-top:4%;
 }
