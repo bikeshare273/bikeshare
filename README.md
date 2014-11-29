@@ -3,14 +3,20 @@
  
 Services 
 
-User Services
-Location Services
-Bike booking and availability related services
+User Services 
+
+Location Services 
+
+Bike booking and availability related services 
 
 
-Integration
+Integration 
 
-User Functionality
-------------------------
-Login - Integrated
-Signup - Integrated
+User Functionality 
+
+------------------------ 
+
+Login - Integrated 
+
+Signup - Integrated 
+
