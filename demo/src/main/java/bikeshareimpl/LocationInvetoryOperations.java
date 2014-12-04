@@ -3,9 +3,7 @@ package bikeshareimpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -19,6 +17,7 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 {
 	private MongoTemplate mongoTemplate = MongodbConnection.getConnection();
 	
+/*********************************************************************************************************/
 	//To get bike inventory for an hour at a particular location
 	public String[] getInvForAnHour(int location_id, Date date, int hour)  
 
@@ -41,7 +40,7 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	    
 	    switch (hour)
     	{ 		
-    	  case 0:   return loc_inv.gethour_0();  	
+    	    case 0:   return loc_inv.gethour_0();  	
 	    	case 1:   return loc_inv.gethour_1();  	
 	    	case 2:   return loc_inv.gethour_2();  	
 	    	case 3:   return loc_inv.gethour_3();  	
@@ -71,10 +70,12 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
     	
 	} // Method Ends
 	    
+/*********************************************************************************************************/
 	//To get bike inventory for an hour at several locations    
 	public Map<Integer, String[]> getInvForAnHourAtVariousLoc(int[] arrayOfLocations, Date date, int hour )
 	    
 	{
+	
 		Map<Integer, String[]> locWiseInventoryForAnHour = new HashMap<>();
 		
 		for (int loop = 0; loop < arrayOfLocations.length; loop++ )
@@ -86,8 +87,9 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 		return locWiseInventoryForAnHour;
 		
 	}
-	    
-	//To get bike inventory at a location for several hours
+	
+/*********************************************************************************************************/
+
 	public Map<Integer, String[]> getInvForSeveralHoursAtOneLocation(int location_id, Date date, int[] arrayOfHours )
 	{
 		Map<Integer, String[]> hourWiseInventoryForLocation = new HashMap<>();
@@ -100,8 +102,63 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 		
 		return hourWiseInventoryForLocation;
 	}
+			
+/*********************************************************************************************************/	
+	//To get bike inventory at a location for several hours with array of bike ids that are present across provided hours
+	public String[] getInvForSeveralHoursAtOneLocationWithOnlyAvailableBikes(int location_id, Date date, int[] arrayOfHours )
+	{
+		String [] tempArrayOfBikesPresentAtGivenHhours;
+		String [] arrayOfBikesPresentAtGivenHhours;
+		Map<Integer, String[]> hourWiseInventoryForLocation = new HashMap<>();
+		String [] returnNullIfNotPresent = null;
+
+		hourWiseInventoryForLocation = getInvForSeveralHoursAtOneLocation(location_id, date, arrayOfHours);
+
+		List<List<String>> lists = new ArrayList<List<String>>();
+		for(int i=0; i<hourWiseInventoryForLocation.size();i++)
+		{
+			lists.add(new ArrayList<String>(Arrays.asList(hourWiseInventoryForLocation.get(i))));
+		}
+
+		List<String> bikesPresentAtAllGivenHours = new ArrayList<String>();
+		bikesPresentAtAllGivenHours.addAll(lists.get(0));
+		for (ListIterator<List<String>> iter = lists.listIterator(1); iter.hasNext(); ) {
+			bikesPresentAtAllGivenHours.retainAll(iter.next());
+		}
+
+		int size = bikesPresentAtAllGivenHours.size();
+		tempArrayOfBikesPresentAtGivenHhours = new String[size];
+		int j=0;
+		for (int i = 0; i<size; i++)
+		{
+			if(!bikesPresentAtAllGivenHours.get(i).equalsIgnoreCase("X"))
+			{
+				tempArrayOfBikesPresentAtGivenHhours[j] = bikesPresentAtAllGivenHours.get(i);
+				j++;
+			}
+		}
+
+		size = j; 
+		arrayOfBikesPresentAtGivenHhours = new String[size];	
+		for (int i = 0; i<size; i++)
+		{
+			arrayOfBikesPresentAtGivenHhours[i]= tempArrayOfBikesPresentAtGivenHhours[i];
+		}
+
+
+		if (arrayOfBikesPresentAtGivenHhours.length==0)
+		{
+			return returnNullIfNotPresent; //Returns null if no bike present at all provided hours
+		}
+		else
+		{
+			return arrayOfBikesPresentAtGivenHhours;
+		}
+
+
+	}
 	    
-	    
+/*********************************************************************************************************/	    
 	//To update location inventory for several hours
 	public void updateInvForBookingHours(int location_id, Date date, int[] arrayOfHours, String bikeID)
 	
@@ -125,7 +182,8 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	    
 	}
 	    
-	
+/*********************************************************************************************************/
+
 	public Date dateFormatter ( Date date)
 	{
 			SimpleDateFormat sdf = null;
@@ -142,6 +200,7 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 		return formattedDate;
 	}
 
+/*********************************************************************************************************/	
 	//Method to select inventories to update
 	public LocationInventory updateInventory(LocationInventory loc_inv, int[] arrayOfHours, String bikeID)
 	    
@@ -348,6 +407,5 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 		return loc_inv;
 		
 	}
-	
-
+/*********************************************************************************************************/
 }
