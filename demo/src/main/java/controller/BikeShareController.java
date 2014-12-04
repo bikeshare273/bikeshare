@@ -57,6 +57,7 @@ public class BikeShareController  extends WebMvcConfigurerAdapter{
 
 	UserOperationInterface userOperationInterface = new UserOperationsImpl();
 	AuthInterface authInterface = new AuthInterfaceImpl();
+	public static String globalReservationIndicator = "RESERVED";
 
 	@Bean
 	public FilterRegistrationBean shallowEtagHeaderFilter() {
