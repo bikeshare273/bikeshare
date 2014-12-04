@@ -11,6 +11,6 @@ public interface LocationInventoryInterface {
 	
 	public Map<Integer, String[]> getInvForSeveralHoursAtOneLocation(int location_id, Date date, int[] arrayOfHours );
 			
-	public void updateInvForBookingHours(int location_id, Date date, int[] arrayOfHours, String bikeID );
+	public void updateInvForBookingHours(int location_id, Date date, int[] arrayOfHours, String bikeID, String reservationIndicator);
 	
 }
