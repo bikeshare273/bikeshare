@@ -1,3 +1,119 @@
+<!-- 
 <div>
-logged in
+<map zoom="11" center="[40.74, -74.18]">
+  <marker position="[40.74, -74.18]" />
+  <shape name="circle" radius="400" center="[40.74,-74.18]" radius="4000" />
+  <control name="overviewMap" opened="true" />
+</map>
+<map />
+</div> -->
+
+<!-- <div class="google_map_container" ng-include onload='getLocation()'>
+<ui-gmap-google-map center='map.center' zoom='map.zoom'>
+ <ui-gmap-marker coords="marker.coords"  idkey="marker.id">
+        </ui-gmap-marker>
+</ui-gmap-google-map>
+ 
+<ng-include onload="getLocation()" >
+</ng-include>
+
+<div> -->
+
+<div ng-include src="googlemap" onload='getLocation()'></div>
+
+
+<div class="container-fluid signup_container" ng-controller="signupformcontroller">
+	<div class="col-md-12">
+		<form name="bikebookingform">
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg bikebookingform_input">
+
+					<input type="text" class="form-control" placeholder="zipcode"
+						name="zipcode" size="50" ng-model="zipcode"
+						ng-minlength="5" ng-maxlength="5" />
+
+					<div class="error-container"
+						ng-show="bikebookingform.zipcode.$dirty && bikebookingform.zipcode.$invalid">
+						<small class="errorbox"
+							ng-show="bikebookingform.zipcode.$error.minlength">Your
+							zipcode is required to be at least 5 characters</small> <small
+							class="errorbox"
+							ng-show="bikebookingform.zipcode.$error.maxlength">Your
+							zipcode cannot be longer than 5 characters</small>
+					</div>
+					
+					
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group bikebookingform_input">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" ng-click="searchMapOnZipCode(zipcode)">Search</button>
+					</span>
+				</div>
+			</div>
+			
+			<div class="row" ng-hide="displayForm">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  bikebookingform_input">
+					<input type="location_name" class="form-control" placeholder="Please click on location in map"
+						name="location_name" size="50" ng-model="location_name"
+						required disabled>
+
+				</div>
+			</div>
+			
+			<div class="row" ng-hide="displayForm">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  bikebookingform_input col-md-4">
+					        <select class="form-control" data-role="listview" ng-options="time.text for time in timelist track by time.value" ng-model="fromtime" ng-change="unlockToTime(fromtime)">
+								<option value="">From Time</option>
+					        </select>
+				</div>
+			</div>
+			
+			<div class="row" ng-hide="displayForm">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  bikebookingform_input col-md-4">
+					        <select class="form-control" data-role="listview" ng-options="time.text for time in totimelist track by time.value" ng-model="totime" ng-disabled="false">
+								<option value="">To Time</option>
+					        </select>
+				</div>
+			</div>
+			
+			
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group input-group-lg  bikebookingform_input col-md-4">
+					      <input type="hidden" class="form-control" name="location_id" ng-model="location_id">
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="input-group bikebookingform_input">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" ng-click="confirmBooking(zipcode)">Confirm Booking</button>
+					</span>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="errorbox" style="position:relative;padding-top:1%;padding-left:47%;">
+					<ul>
+						<li ng-repeat="error in signupform_error">{{ error }}</li>
+					</ul>
+				</div>
+				<div class="successbox" style="position:relative;padding-top:1%;padding-left:47%;">{{signupform_success}}</div>
+			</div>
+			<!-- <div class="input-group input-group-lg  register_textbox">
+                            <input type="text" class="form-control" placeholder="Credit Card Number" size="50">
+                          </div> -->
+
+		</form>
+	</div>
 </div>
