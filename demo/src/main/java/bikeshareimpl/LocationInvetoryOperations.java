@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import controller.BikeShareController;
 import resources.LocationInventory;
 import util.MongodbConnection;
 import bikeshareinterfaces.LocationInventoryInterface;
@@ -131,7 +132,7 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 		int j=0;
 		for (int i = 0; i<size; i++)
 		{
-			if(!bikesPresentAtAllGivenHours.get(i).equalsIgnoreCase("X"))
+			if(!bikesPresentAtAllGivenHours.get(i).equalsIgnoreCase(BikeShareController.globalReservationIndicator))
 			{
 				tempArrayOfBikesPresentAtGivenHhours[j] = bikesPresentAtAllGivenHours.get(i);
 				j++;
@@ -159,8 +160,11 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	}
 	    
 /*********************************************************************************************************/	    
-	//To update location inventory for several hours
-	public void updateInvForBookingHours(int location_id, Date date, int[] arrayOfHours, String bikeID)
+	//To update location inventory for several hours - Same function will be used for bookings and cancellations
+	// For Booking : bikeId = Reserved Bike ID     and    reservationIndicator = reservationIndicatorString like "RESERVED" 
+	// For Cancellation : bikeID = reservationIndicatorString     and    reservationIndicator = bikeID for which booking has been cancelled
+	
+	public void updateInvForBookingHours(int location_id, Date date, int[] arrayOfHours, String bikeID, String reservationIndicator)
 	
 	{
 		     
@@ -175,7 +179,7 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 		
 	    LocationInventory updated_loc_inv = new LocationInventory();
 	    
-	    updated_loc_inv = updateInventory(loc_inv, arrayOfHours, bikeID) ;
+	    updated_loc_inv = updateInventory(loc_inv, arrayOfHours, bikeID, reservationIndicator) ;
 	    		
 	    mongoTemplate.remove(query, LocationInventory.class, "locationinv");
 	    mongoTemplate.save(updated_loc_inv, "locationinv");		
@@ -202,7 +206,7 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 
 /*********************************************************************************************************/	
 	//Method to select inventories to update
-	public LocationInventory updateInventory(LocationInventory loc_inv, int[] arrayOfHours, String bikeID)
+	public LocationInventory updateInventory(LocationInventory loc_inv, int[] arrayOfHours, String bikeID, String reservationIndicator)
 	    
 	{
 		String tempInv[] = null;
@@ -211,19 +215,31 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 		
 		switch (arrayOfHours[loop])
      	{ 		
-     	   	case 0:   
-     	   			tempInv = null;
-     	   			tempInv = loc_inv.gethour_0();
-     	   			for(int i = 0; i<tempInv.length; i++)
-     	   			{tempInv[i].replace(bikeID, "X");}
-     	   			loc_inv.sethour_0(tempInv);
-     	   	break;
+     		case 0:   
+     			tempInv = null;
+     			tempInv = loc_inv.gethour_0();
+     			for(int i = 0; i<tempInv.length; i++)
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
+     			loc_inv.sethour_0(tempInv);
+     		break;
  	    	
      	    case 1:   
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_1();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_1(tempInv);
 	   		break;
  	   		
@@ -231,7 +247,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_2();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_2(tempInv);
 	   		break;
      		   		
@@ -239,7 +261,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_3();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_3(tempInv);
 	   	    break;
 	   	    
@@ -247,7 +275,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_4();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_4(tempInv);
 	   	    break;
 	   	    
@@ -255,7 +289,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_5();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_5(tempInv);
 	   	    break;
 	   	    
@@ -263,7 +303,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_6();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_6(tempInv);
 	   	    break;
 	   	    
@@ -271,7 +317,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_7();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_7(tempInv);
 	   	    break;
 	   	    
@@ -279,7 +331,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_8();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_8(tempInv);
 	   	    break;
 	   	    
@@ -287,7 +345,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_9();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_9(tempInv);
 	   	    break;
 	   	    
@@ -295,7 +359,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_10();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_10(tempInv);
 	   	    break;
 	   	    
@@ -303,7 +373,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_11();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_11(tempInv);
 	   	    break;
 	   	    
@@ -311,7 +387,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_12();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_12(tempInv);
 	   	    break;
 	   	    
@@ -319,7 +401,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_13();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_13(tempInv);
 	   	    break;
 	   	    
@@ -327,7 +415,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_14();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_14(tempInv);
 	   	    break;
 	   	    
@@ -335,7 +429,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_15();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_15(tempInv);
 	   	    break;
 	   	    
@@ -343,7 +443,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_16();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_16(tempInv);
 	   	    break;
 	   	    
@@ -351,7 +457,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_17();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_17(tempInv);
 	   	    break;
 	   	    
@@ -359,7 +471,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_18();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_18(tempInv);
 	   	    break;
 	   	    
@@ -367,7 +485,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_19();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_19(tempInv);
 	   	    break;
 	   	    
@@ -375,7 +499,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_20();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_20(tempInv);
 	   	    break;
 	   	    
@@ -383,7 +513,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_21();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_21(tempInv);
 	   	    break;
 	   	    
@@ -391,7 +527,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_22();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_22(tempInv);
 	   	    break;
      	 
@@ -399,7 +541,13 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	   			tempInv = null;
 	   			tempInv = loc_inv.gethour_23();
 	   			for(int i = 0; i<tempInv.length; i++)
-	   			{tempInv[i].replace(bikeID, "X");}
+     			{
+     				if(tempInv[i].equalsIgnoreCase(bikeID))
+     				{
+     					tempInv[i] = tempInv[i].replace(bikeID, reservationIndicator);
+     					break;
+     				}
+     			}
 	   			loc_inv.sethour_23(tempInv);
 	   	    break;
 	   	}
