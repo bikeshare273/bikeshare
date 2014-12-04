@@ -98,15 +98,6 @@ bikeshareapp.controller('authenticatecontroller', function($scope,$filter) {
 		   };
 	
 	
-	/*$scope.map = {
-		center : {
-			latitude : 45,
-			longitude : -73
-		},
-		zoom : 14,
-		control: {},
-	    marker: {}
-	};*/
 	
 	
 	$scope.searchMapOnZipCode = function(zipcode){
@@ -127,7 +118,6 @@ bikeshareapp.controller('authenticatecontroller', function($scope,$filter) {
 			    };
 			    $scope.$apply();
 	        
-	        //$scope.map = {center: {latitude: lat, longitude: lng }, zoom: 14 };
 	      } else {
 	        alert('Geocode was not successful for the following reason: ' + status);
 	      }
@@ -182,20 +172,7 @@ bikeshareapp.controller('authenticatecontroller', function($scope,$filter) {
     	}
 	};
 	
-	/*if(navigator.geolocation) {
-	    navigator.geolocation.getCurrentPosition(function(position) {
 
-	      $scope.map = {center: {latitude: position.coords.latitude, longitude: position.coords.longitude }, zoom: 10 };
-	      
-	    }, function() {
-	      handleNoGeolocation(true);
-	    });
-	  } else {
-	    // Browser doesn't support Geolocation
-	    handleNoGeolocation(false);
-	  }
-	*/
-	
 	$scope.getLocation = function(){
 		console.log("mappppp");
 		if(navigator.geolocation) {
