@@ -1,29 +1,87 @@
 // Meta data used by the AngularJS docs app
 angular.module('versionsData', [])
   .value('NG_VERSION', {
-  "raw": "v1.2.26",
+  "raw": "v1.2.27",
   "major": 1,
   "minor": 2,
-  "patch": 26,
+  "patch": 27,
   "prerelease": [],
   "build": [],
-  "version": "1.2.26",
-  "codeName": "captivating-disinterest",
-  "full": "1.2.26",
+  "version": "1.2.27",
+  "codeName": "prime-factorization",
+  "full": "1.2.27",
   "branch": "v1.2.x"
 })
   .value('NG_VERSIONS', [
   {
-    "raw": "v1.2.26",
+    "raw": "v1.2.27",
     "major": 1,
     "minor": 2,
-    "patch": 26,
+    "patch": 27,
     "prerelease": [],
     "build": [],
-    "version": "1.2.26",
-    "codeName": "captivating-disinterest",
-    "full": "1.2.26",
+    "version": "1.2.27",
+    "codeName": "prime-factorization",
+    "full": "1.2.27",
     "branch": "v1.2.x"
+  },
+  {
+    "raw": "v1.3.3",
+    "major": 1,
+    "minor": 3,
+    "patch": 3,
+    "prerelease": [],
+    "build": [],
+    "version": "1.3.3",
+    "isStable": false,
+    "docsUrl": "http://code.angularjs.org/1.3.3/docs"
+  },
+  {
+    "raw": "v1.3.2",
+    "major": 1,
+    "minor": 3,
+    "patch": 2,
+    "prerelease": [],
+    "build": [],
+    "version": "1.3.2",
+    "isStable": false,
+    "docsUrl": "http://code.angularjs.org/1.3.2/docs"
+  },
+  {
+    "raw": "v1.3.1",
+    "major": 1,
+    "minor": 3,
+    "patch": 1,
+    "prerelease": [],
+    "build": [],
+    "version": "1.3.1",
+    "isStable": false,
+    "docsUrl": "http://code.angularjs.org/1.3.1/docs"
+  },
+  {
+    "raw": "v1.3.0",
+    "major": 1,
+    "minor": 3,
+    "patch": 0,
+    "prerelease": [],
+    "build": [],
+    "version": "1.3.0",
+    "isStable": false,
+    "docsUrl": "http://code.angularjs.org/1.3.0/docs"
+  },
+  {
+    "raw": "v1.3.0-rc.5",
+    "major": 1,
+    "minor": 3,
+    "patch": 0,
+    "prerelease": [
+      "rc",
+      5
+    ],
+    "build": [],
+    "version": "1.3.0-rc.5",
+    "isStable": false,
+    "docsUrl": "http://code.angularjs.org/1.3.0-rc.5/docs"
   },
   {
     "raw": "v1.3.0-rc.4",
@@ -360,6 +418,17 @@ angular.module('versionsData', [])
     "version": "1.3.0-beta.1",
     "isStable": false,
     "docsUrl": "http://code.angularjs.org/1.3.0-beta.1/docs"
+  },
+  {
+    "raw": "v1.2.26",
+    "major": 1,
+    "minor": 2,
+    "patch": 26,
+    "prerelease": [],
+    "build": [],
+    "version": "1.2.26",
+    "isStable": true,
+    "docsUrl": "http://code.angularjs.org/1.2.26/docs"
   },
   {
     "raw": "v1.2.25",

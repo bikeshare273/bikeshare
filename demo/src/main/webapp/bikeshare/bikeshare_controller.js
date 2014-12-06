@@ -7,7 +7,7 @@ bikeshareapp.config(function($routeProvider) {
 
 	// route for the login page
 	.when('/', {
-		templateUrl : 'loginfinal.html',
+		templateUrl : 'template.html',
 		controller : 'loginController'
 	})
 
@@ -72,7 +72,7 @@ bikeshareapp.controller('loginformcontroller', function($scope, $http,
 			if (dataFromServer.sessionId != null) {
 				$location.url('/home');
 			} else {
-				$scope.loginform_error = "Invalid Username/Password";
+				$scope.loginform_error = "Invalid Username or Password";
 			}
 
 		});
@@ -242,7 +242,7 @@ bikeshareapp
 										headers, config) {
 									if (dataFromServer.message == null
 											|| dataFromServer.message == "") {
-										$scope.signupform_success = "User created successfully";
+										$scope.signupform_success = "Congrats " +$scope.signupform_name+ ". You are successfully registered";
 									} else {
 										$scope.signupform_error = dataFromServer.message;
 									}

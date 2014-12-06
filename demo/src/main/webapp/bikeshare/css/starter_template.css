@@ -6,7 +6,7 @@
 }
 
 .login_box {
-	padding-bottom: 20%;
+	padding-bottom: 2%;
 	background-color: #eee
 }
 
@@ -15,18 +15,21 @@
 }
 
 .username_textbox {
-	padding-top: 10%;
+	padding-top: 1%;
 	padding-bottom: 1%;
+	left: 34%;
 }
 
 .password_textbox {
 	padding-top: 1%;
 	padding-bottom: 1%;
+	left:34%;
 }
 
 .login_button {
 	padding-top: 1%;
-	padding-bottom: 1%
+	padding-bottom: 1%;
+	left: 34%;
 }
 
 .footer {
@@ -53,17 +56,27 @@
 .register_button {
 	padding-top: 5%;
 	padding-bottom: 5%;
-	margin-left: 48%;
+	right: 16%;
 }
 
 .errorbox {
+	color: white;
+	font-style: italic;
+	right: 50%;
+}
+
+.errorbox1 {
 	color: red;
-	font-style: italic
+	font-style: italic;
+	margin-left: 550px;
 }
 
 .successbox {
-	color: green;
-	font-style: italic
+	color: lawngreen;
+	font-style: italic;
+	font-style: normal;
+	font: 18px arial;
+	right: 23%;
 }
 
 .carousel_container {
@@ -82,4 +95,12 @@
 .bikebookingform_input{
 	padding-top: 1%;
 	padding-bottom: 1%;
+}
+
+
+.navbar-header,
+.navbar-nav li a {
+    line-height: 150px;
+    height: 70px;
+    padding-top: 0;
 }
