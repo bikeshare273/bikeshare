@@ -1,0 +1,106 @@
+.body_bg_image {
+	background-image:
+		url("http://sfmta.com/sites/default/files/projects/aep_228b_6_1.jpg");
+	background-size: cover;
+	opacity: .5;
+}
+
+.login_box {
+	padding-bottom: 20%;
+	background-color: #eee
+}
+
+.login_container {
+	background-color: #eee
+}
+
+.username_textbox {
+	padding-top: 10%;
+	padding-bottom: 1%;
+	left: 34%;
+}
+
+.password_textbox {
+	padding-top: 1%;
+	padding-bottom: 1%;
+	left:34%;
+}
+
+.login_button {
+	padding-top: 1%;
+	padding-bottom: 1%;
+	left: 34%;
+}
+
+.footer {
+	clear: both;
+	position: relative;
+	margin-top: -3em;
+}
+
+.footer_container {
+	height: 100px;
+	background: black;
+}
+
+.register {
+	padding-top: 2%;
+	margin-left: 74%;
+	color: blue
+}
+
+.register_textbox {
+	padding-top: 2%;
+}
+
+.register_button {
+	padding-top: 5%;
+	padding-bottom: 5%;
+	right: 16%;
+}
+
+.errorbox {
+	color: white;
+	font-style: italic;
+	right: 50%;
+}
+
+.errorbox1 {
+	color: red;
+	font-style: italic;
+	margin-left: 550px;
+}
+
+.successbox {
+	color: lawngreen;
+	font-style: italic;
+	font-style: normal;
+	font: 18px arial;
+	right: 23%;
+}
+
+.carousel_container {
+	padding-top: 4%;
+}
+
+.signup_container {
+	padding-top: 4%;
+}
+.angular-google-map-container {
+	height: 600px;
+}
+.google_map_container{
+	padding-top: 7%;
+}
+.bikebookingform_input{
+	padding-top: 1%;
+	padding-bottom: 1%;
+}
+
+
+.navbar-header,
+.navbar-nav li a {
+    line-height: 150px;
+    height: 70px;
+    padding-top: 0;
+}

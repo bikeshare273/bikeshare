@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Bike Share</title>
+
+    <!-- Bootstrap Core CSS -->
+   <link href="../css/bootstrap.min.css" rel="stylesheet"> 
+    
+    <!-- Angular -->
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="../angular/angular.js"></script>
+	<script src="../angular/angular-route.js"></script>
+	<script src="../angular/angular-resource.js"></script>
+	<script src="../angular/angular-google-maps.min.js"></script>
+	<script src="../angular/lodash.min.js"></script>
+    
+    
+	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script src="../dist/js/ng-map.min.js"></script>
+
+	<!-- JS -->
+	<script src="../bikeshare_controller.js"></script>
+
+    <!-- Custom CSS -->
+    <link href="../css/stylish-portfolio.css" rel="stylesheet">
+    <link type="text/css" href="../css/starter_template.css" rel="stylesheet">
+	
+	<!-- Map -->
+	
+	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	
+	
+    <!-- Custom Fonts -->
+    
+    <link href="../font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	
+
+	
+   
+
+
+</head>
+
+<body ng-app="bikeshareapp" class="mainform">
+
+
+    <!-- Navigation -->
+   <!--   <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+            <li class="sidebar-brand">
+                <a href="#top">Spartan Bike Share</a>
+            </li>
+            <li>
+                <a href="#top">Home</a>
+            </li>
+            <li>
+                <a href="#login">Login</a>
+            </li>
+            <li>
+                <a href="#signup">Sign Up</a>
+            </li>
+            <li>
+                <a href="#contact">Map</a>
+            </li>
+            <li>
+                <a href="#contactus">Contact</a>
+            </li>
+        </ul>
+    </nav>
+   
+-->
+   
+   
+   <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img src="../images/SpartanBikeShareLogo.jpg" alt="">
+                </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                   
+            <li>
+                <a href="#top">Home</a>
+            </li>
+            <li>
+                <a href="#login">Login</a>
+            </li>
+            <li>
+                <a href="#signup">Sign Up</a>
+            </li>
+            <li>
+                <a href="#contact">Map</a>
+            </li>
+            <li>
+                <a href="#contactus">Contact</a>
+            </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+   
+   
+   
+   
+       
+
+    <!-- Header -->
+    <header id="top" class="header">
+        <div class="text-vertical-center">
+            <h1>Spartan Bike Share</h1>
+            <h3>San Jose State University</h3>
+            <br>
+            <a href="#contact" class="btn btn-dark btn-lg">Our Locations</a>
+        </div>
+    </header>
+
+<!--  Login -->
+ 
+ 	<section id="login" class="login"> 
+    		<div class="">
+			<div class="login_box" ng-controller="loginformcontroller">
+				
+					 <div class="row text-center">
+					 <br>
+					 <br>
+					 <br>
+					  
+                           <h2>Login</h2>	
+                    <hr class="small">
+					 </div>
+					 
+								<form>
+								<div class="row">
+							 	<div class="col-md-4 username_textbox">
+							 	<br>
+										<input type="text" class="form-control" placeholder="Username"
+											ng-model="loginform_username" ng-maxlength="30" size="20"
+											autofocus />
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-4 password_textbox">
+									
+									
+										<input type="password" class="form-control" placeholder="Password"
+											ng-model="loginform_password" ng-maxlength="20" />
+									</div>
+									
+									</div>
+									<br>
+									
+									<!-- Button -->
+									<div class="row">
+								<div class="col-md-4 login_button">
+										<button class="btn btn-lg btn-primary btn-block" type="button"
+											ng-click="loginform_getAuthenticated()">Login</button>
+
+									</div>
+									</div>
+									
+								<!--  		<div class="col-lg-4 rememberme_checkbox">
+											<input type="checkbox" value="None" id="squaredFour" name="check" />
+											<label for="squaredFour"><span></span>Remember Me</label>
+										</div>
+									
+									-->
+
+										<div class="col-md-4 register" style="margin-left:38%">
+										<div class="row">
+										<a href="#signup">Don't have an account with us? Sign Up Now !!!</a>
+									</div>
+									<br>
+									<br>
+									<br>
+									
+									</div>
+									<div class="errorbox1" style="margin-right:30%; padding-top:2%">{{loginform_error}}
+									</div>
+								 <!-- row -->
+								</form>
+							
+							<div class=""></div>
+					
+				<!--  	</div>
+				</div> -->
+				
+			</div>
+
+		</div>
+        <!-- /.container -->
+   <!--  </section> -->
+
+
+    <!--SIGNUP -->
+   
+    <section id="signup" class="signup bg-primary">
+        <div class="container">
+            <div class="row text-center">
+             <!--     <div class="col-lg-10 col-lg-offset-1"> -->
+                    <h2>Sign Up</h2>
+                    <hr class="small">
+                	<div class="container-fluid signup_container" ng-controller="signupformcontroller">
+				<div class="">
+					<div class="">
+						<div class="">
+							<div class=""></div>
+							<div class="">
+								<form name="signupform	">
+								<div class="row">
+										<div class="col-md-4"></div>
+									<div class="input-group input-group-lg register_textbox">
+										<input type="text" class="form-control" placeholder="Name"
+											ng-model="signupform_name" size="40" ng-minlength="3" ng-maxlength="40" required />
+											<br>
+											<div class="col-md-4"></div>
+										<div class="error-container" ng-show="signupform.signupform_name.$dirty && signupform.signupform_name.$invalid">
+											<small class="errorbox"
+													ng-show="signupform.signupform_name.$error.required">Name is required</small> <small class="errorbox"
+													ng-show="signupform.signupform_name.$error.minlength">Your
+													Name is required to be at least 3 characters</small> <small
+													class="errorbox"
+													ng-show="signupform.signupform_name.$error.maxlength">Your
+													name cannot be longer than 20 characters</small> <small class="errorbox"
+													ng-show="signupform.signupform_name.$error.unique">That
+													name is taken, please try another
+											</small>
+										</div>
+									
+									</div>
+									</div>
+									<br>
+								<div class="row">
+										<div class="col-md-4"></div>	
+									<div class="input-group input-group-lg  register_textbox">
+										<input type="email" class="form-control" placeholder="E-mail e.g. joesmith@gmail.com "
+											name="signupform_email" size="40" ng-model="signupform_email" required />
+								
+										<div class="error-container"
+											ng-show="signupform.signupform_email.$dirty && signupform.signupform_email.$invalid">
+											<small class="errorbox"
+											ng-show="signupform.signupform_email.$error.required">Email address is required</small> 
+											<small class="errorbox"
+											ng-show="signupform.signupform_email.$error.email">Email id is invalid</small>
+											<small class="errorbox"
+											ng-show="signupform.signupform_email.$error.unique">That
+											email is taken, please try another</small>
+										</div>
+								
+									</div>
+								</div>
+									
+									<br>
+									<div class="row">
+										<div class="col-md-4"></div>
+									<div class="input-group input-group-lg  register_textbox">
+										<input type="text" class="form-control" placeholder="Mobile Number" name="signupform_phone" 
+										size="40" ng-model="signupform_phone" ng-minlength="10" ng-maxlength="10" required />
+									
+									<div class="error-container"
+										ng-show="signupform.signupform_phone.$dirty && signupform.signupform_phone.$invalid">
+										<small class="errorbox"
+										ng-show="signupform.signupform_phone.$error.required">Mobile number is required</small> 
+										<small class="errorbox"
+										ng-show="signupform.signupform_phone.$error.minlength">Mobile number is invalid. It should have 10 digits.</small>
+										<small class="errorbox"
+										ng-show="signupform.signupform_phone.$error.maxlength">Mobile number is invalid. It cannot have more than 10 digits.</small>
+									</div>
+									
+									</div>
+									</div>
+									
+									<br>
+									<div class="row">
+										<div class="col-md-4"></div>
+											<div class="input-group input-group-lg  register_textbox">
+											<input type="text" class="form-control" placeholder="Address" name="signupform_address" 
+											size="40" ng-model="signupform_address" required />
+								<div class="error-container" 
+								ng-show="signupform.signupform_address.$dirty && signupform.signupform_address.$invalid">
+														<small class="errorbox"
+														ng-show="signupform.signupform_address.$error.required">Address is required</small> 
+												</div>	
+						
+										</div>
+									</div>
+									<br>
+								
+									<div class="row">
+										<div class="col-md-4"></div>
+											<div class="input-group input-group-lg  register_textbox">
+							<input type="text" class="form-control" ng-minlength="5" placeholder="Zipcode" name="signupform_zipcode"
+												size="40" ng-model="signupform_zipcode" required>
+										
+												<div class="error-container"
+														ng-show="signupform.signupform_zipcode.$dirty && signupform.signupform_zipcode.$invalid">
+														<small class="errorbox"
+														ng-show="signupform.signupform_zipcode.$error.required">Zipcode is required</small> 
+														<small class="errorbox" ng-show="signupform.signupform_zipcode.$error.minlength">Zipcode is required to have at least 5 digits</small>
+														
+										
+												</div>
+						
+									</div>
+									</div>
+									
+									<br>
+									<div class="row">
+										<div class="col-md-4"></div>
+											<div class="input-group input-group-lg  register_textbox">
+							<input type="text" class="form-control" placeholder="Username" name="signupform_username"
+												size="40" ng-model="signupform_username" required>
+									
+										<div class="error-container"
+												ng-show="signupform.signupform_username.$dirty && signupform.signupform_username.$invalid">
+												<small class="errorbox"
+												ng-show="signupform.signupform_username.$error.required">Username is required</small> 
+										</div>
+									
+									</div>
+									</div>
+									
+									<br>
+									<div class="row">
+										<div class="col-md-4"></div>
+											<div class="input-group input-group-lg  register_textbox">
+											<input type="password" class="form-control" placeholder="Password" name="signupform_password"
+												size="40" ng-model="signupform_password" required>
+									<div class="error-container"
+											ng-show="signupform.signupform_password.$dirty && signupform.signupform_password.$invalid">
+											<small class="errorbox"
+											ng-show="signupform.signupform_password.$error.required">Password is required</small> 
+									</div>
+									
+									</div>
+									</div>
+									
+								
+									
+									<br>
+									<div class="row">
+										<div class="col-md-4"></div>
+										<div class="input-group input-group-lg register_button">
+											<span class="input-group-btn">
+												<button class="btn btn-default" type="reset" ng-click="signupform_signup()" size="20">Register</button>
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-4"></div>
+										<div class="errorbox" style="position:relative;padding-top:1%;padding-left:30%;">
+											<ul>
+												<li ng-repeat="error in signupform_error">{{ error }}</li>
+											</ul>
+										</div>
+										
+										<div class="col-md-4"></div>
+										<div class="successbox" style="position:relative; padding-top:1%;padding-left:42%;">{{signupform_success}}</div>
+									</div>
+									
+									
+								</form>
+							</div>
+							<div class=""></div>
+						</div>
+					</div>
+				</div>
+			</div>
+                    <!-- /.row (nested) -->
+             <!--     </div> -->
+                <!-- /.col-lg-10 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </section>
+
+
+	 
+	 
+    
+    <section id="contact" class="map">
+        <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
+        <br />
+        <small>
+            <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
+        </small>
+        </iframe>
+    </section>
+
+
+
+    <!-- Footer -->
+    
+    <section id="contactus" class="contactus"></section>
+        <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                    <h4><strong>Spartan Bike Share</strong>
+                    </h4>
+                    <p>San Jose State University<br>San Jose, CA 95112</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-phone fa-fw"></i> (360) 440-6210</li>
+                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:bikeshare273@gmail.com">bikeshare273@gmail.com</a>
+                        </li>
+                    </ul>
+                    <br>
+                    <ul class="list-inline">
+                        <li>
+                            <a href="https://www.facebook.com/pages/Spartan-Bike-Share/387127594779437?skip_nax_wizard=true&ref_type=logout_gear"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/bikeshare273"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                        </li>
+                       
+                    </ul>
+                    <hr class="small">
+                    <p class="text-muted">Copyright &copy; Spartan Bike Share 2014</p>
+                </div>
+            </div>
+        </div>
+        </footer>
+        </section>
+    
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script>
+    // Closes the sidebar menu
+    $("#menu-close").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Opens the sidebar menu
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Scrolls to the selected menu item on the page
+    $(function() {
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+    });
+    
+
+    </script>
+    
+
+
+</body>
+
+</html>
