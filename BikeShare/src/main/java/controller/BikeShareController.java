@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 import resources.Bike;
+import resources.SmsNotifyUser;
 import resources.User;
 import scala.Equals;
 
@@ -44,6 +45,7 @@ import bikeshareimpl.BikeOperationsImpl;
 import bikeshareimpl.UserOperationsImpl;
 import bikeshareinterfaces.BikeOperationsInterface;
 import bikeshareinterfaces.UserOperationInterface;
+import util.SendSMSNotifications;
 
 @Component
 @EnableAutoConfiguration
@@ -129,5 +131,13 @@ public class BikeShareController {
 	{
 		bikeOperationInterface.updateBikeStatusToAvailable(bike_id);
 	}
-	
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/notifyUserBySms", method = RequestMethod.GET)
+    @ResponseBody
+    public void sendSMSNotification(@Valid @RequestBody SmsNotifyUser smsNotifyUser)
+    {
+        SendSMSNotifications.sendSMS(smsNotifyUser.getToPhoneNumber(),smsNotifyUser.getReceiver());
+    }
+
 }

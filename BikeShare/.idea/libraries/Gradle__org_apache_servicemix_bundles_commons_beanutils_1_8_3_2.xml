@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.servicemix.bundles.commons-beanutils-1.8.3_2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-beanutils/1.8.3_2/42e4fe0d7afd6038e8bccbfa5a9cd6ae65b887d1/org.apache.servicemix.bundles.commons-beanutils-1.8.3_2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-beanutils/1.8.3_2/f32fc6eadba772cd9d170e81bf1bc22d19848fef/org.apache.servicemix.bundles.commons-beanutils-1.8.3_2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

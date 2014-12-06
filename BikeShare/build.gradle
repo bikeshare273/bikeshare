@@ -55,6 +55,7 @@ dependencies {
     compile("org.springframework:spring-web:3.1.2.RELEASE")
     compile("org.codehaus.jackson:jackson-mapper-asl:1.9.9")
     compile("org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-beanutils:1.8.3_2")
+    compile("com.twilio.sdk:twilio-java-sdk:3.4.2")
 }
 
 task wrapper(type: Wrapper) {
