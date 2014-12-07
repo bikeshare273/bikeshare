@@ -1,37 +1,50 @@
-<!-- 
-<div>
-<map zoom="11" center="[40.74, -74.18]">
-  <marker position="[40.74, -74.18]" />
-  <shape name="circle" radius="400" center="[40.74,-74.18]" radius="4000" />
-  <control name="overviewMap" opened="true" />
-</map>
-<map />
-</div> -->
+<div class="" >
+      <div class="container">
 
-<!-- <div class="google_map_container" ng-include onload='getLocation()'>
-<ui-gmap-google-map center='map.center' zoom='map.zoom'>
- <ui-gmap-marker coords="marker.coords"  idkey="marker.id">
-        </ui-gmap-marker>
-</ui-gmap-google-map>
- 
-<ng-include onload="getLocation()" >
-</ng-include>
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+               <a class="navbar-brand">Welcome Rider!</a>
+             
+              
+            </div>
+            
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li class="navbar-brand"> <a href="#">Logout</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
 
-<div> -->
+      </div>
+      
+    </div>
+    
 
 <div ng-include src="googlemap" onload='getLocation()'></div>
 
 
-<div class="container-fluid signup_container" ng-controller="signupformcontroller">
+<div class="container-fluid signup_container" >
+
 	<div class="col-md-12">
+	<div class="panel panel-default">
+     <div class="panel-heading">Bike Reservation</div>
+     <div class="panel-body">
 		<form name="bikebookingform">
 			<div class="row">
 				<div class="col-md-4"></div>
-				<div class="input-group input-group-lg bikebookingform_input">
+				<div class="input-group input-group-lg enter_zipcode">
 
-					<input type="text" class="form-control" placeholder="zipcode"
+			<label for="zipcode">Zipcode:</label>		<input type="text" class="form-control" placeholder="Enter Zipcode"
 						name="zipcode" size="50" ng-model="zipcode"
-						ng-minlength="5" ng-maxlength="5" />
+						ng-minlength="5" ng-maxlength="8" />
 
 					<div class="error-container"
 						ng-show="bikebookingform.zipcode.$dirty && bikebookingform.zipcode.$invalid">
@@ -40,45 +53,49 @@
 							zipcode is required to be at least 5 characters</small> <small
 							class="errorbox"
 							ng-show="bikebookingform.zipcode.$error.maxlength">Your
-							zipcode cannot be longer than 5 characters</small>
+							zipcode cannot be longer than 8 digits</small>
 					</div>
 					
 					
 				</div>
 			</div>
 			
+			
 			<div class="row">
 				<div class="col-md-4"></div>
-				<div class="input-group bikebookingform_input">
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" ng-click="searchMapOnZipCode(zipcode)">Search</button>
-					</span>
+				<div class="input-group search_button">
+					<button class="btn btn-dark btn-lg" type="button" ng-click="searchMapOnZipCode(zipcode)">Search</button>
+					
 				</div>
 			</div>
 			
+			<br>
+			
 			<div class="row" ng-hide="displayForm">
 				<div class="col-md-4"></div>
-				<div class="input-group input-group-lg  bikebookingform_input">
+				<div class="input-group input-group-lg  disabled_textbox">
 					<input type="location_name" class="form-control" placeholder="Please click on location in map"
 						name="location_name" size="50" ng-model="location_name"
 						required disabled>
 
 				</div>
 			</div>
+			<br>
 			
 			<div class="row" ng-hide="displayForm">
 				<div class="col-md-4"></div>
-				<div class="input-group input-group-lg  bikebookingform_input col-md-4">
-					        <select class="form-control" data-role="listview" ng-options="time.text for time in timelist track by time.value" ng-model="fromtime" ng-change="unlockToTime(fromtime)">
+				<div class="input-group input-group-lg  from_time col-md-4">
+					<label for="timefrom">From:</label>	 <select class="form-control" data-role="listview" ng-options="time.text for time in timelist track by time.value" ng-model="fromtime" ng-change="unlockToTime(fromtime)">
 								<option value="">From Time</option>
 					        </select>
 				</div>
 			</div>
 			
+			<br>
 			<div class="row" ng-hide="displayForm">
 				<div class="col-md-4"></div>
-				<div class="input-group input-group-lg  bikebookingform_input col-md-4">
-					        <select class="form-control" data-role="listview" ng-options="time.text for time in totimelist track by time.value" ng-model="totime" ng-disabled="false">
+				<div class="input-group input-group-lg  to_time col-md-4">
+					<label for="timeto">To:</label>   <select class="form-control" data-role="listview" ng-options="time.text for time in totimelist track by time.value" ng-model="totime" ng-disabled="false" ng-change="checkAvailability(location_id, fromtime, totime)">
 								<option value="">To Time</option>
 					        </select>
 				</div>
@@ -91,13 +108,23 @@
 					      <input type="hidden" class="form-control" name="location_id" ng-model="location_id">
 				</div>
 			</div>
+		
 			
-			<div class="row">
+			<div class="row" ng-hide="bikesListShow">
 				<div class="col-md-4"></div>
-				<div class="input-group bikebookingform_input">
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" ng-click="confirmBooking(zipcode)">Confirm Booking</button>
-					</span>
+				<div class="input-group input-group-lg  bike_list col-md-4">
+					  <label for="bikelist">Bike Type and Price:</label>      <select class="form-control" data-role="listview" ng-options="bike.bikename+' '+bike.type+'  $'+bike.price for bike in bikeslist track by bike.bike_id" ng-model="bikeid"
+					         ng-disabled="false" ng-change="showConfirmBookingButton()">
+								<option value="">Select Bikes</option>
+					        </select>
+				</div>
+			</div>
+			
+			<div class="row"  ng-hide="bikeBookButtonShow">
+				<div class="col-md-4"></div>
+				<div class="input-group confirm_booking_button">
+						<button class="btn btn-dark btn-lg" type="button" ng-click="confirmBooking(location_id, fromtime, totime, bikeid)">Cofirm Booking</button>
+					
 				</div>
 			</div>
 			
@@ -105,15 +132,19 @@
 				<div class="col-md-4"></div>
 				<div class="errorbox" style="position:relative;padding-top:1%;padding-left:47%;">
 					<ul>
-						<li ng-repeat="error in signupform_error">{{ error }}</li>
+						<li ng-repeat="error in bookingform_error">{{ error }}</li>
 					</ul>
 				</div>
-				<div class="successbox" style="position:relative;padding-top:1%;padding-left:47%;">{{signupform_success}}</div>
+				<div class="successbox" style="position:relative;padding-top:1%;padding-left:47%;">{{bookingform_success}}</div>
 			</div>
 			<!-- <div class="input-group input-group-lg  register_textbox">
                             <input type="text" class="form-control" placeholder="Credit Card Number" size="50">
                           </div> -->
 
 		</form>
+		</div>
+		</div>
+		
 	</div>
 </div>
+

@@ -3,14 +3,25 @@ package bikeshareinterfaces;
 import java.text.ParseException;
 import java.util.*;
 
+import resources.Bike;
+import resources.LocationInventory;
+
 public interface LocationInventoryInterface {
 	
-	public String[] getInvForAnHour(int location_id, Date date, int hour ) throws ParseException;
+	public String[] getInvForAnHour(int location_id, int hour ) throws ParseException;
 	
-	public Map<Integer, String[]> getInvForAnHourAtVariousLoc(int[] arrayOfLocation_id, Date date, int hour );
+	//public Map<Integer, String[]> getInvForAnHourAtVariousLoc(int[] arrayOfLocation_id, int hour );
 	
-	public Map<Integer, String[]> getInvForSeveralHoursAtOneLocation(int location_id, Date date, int[] arrayOfHours );
+	public ArrayList<String[]> getInvForSeveralHoursAtOneLocation(int location_id, int fromHour, int toHour );
 			
-	public void updateInvForBookingHours(int location_id, Date date, int[] arrayOfHours, String bikeID, String reservationIndicator);
+	public String[] getInvForSeveralHoursAtOneLocationWithOnlyAvailableBikes(int location_id, int fromHour, int toHour);
+	
+	public LocationInventory updateInvForReservation(int location_id, int fromhour, int toHour, String bikeID);
+	
+	public LocationInventory updateInvForCancellation(int location_id, int fromHour, int toHour, String bikeID);
+	
+	public Bike[] getAvailableBikes(int location_id, int fromHour, int toHour);
+	//public Bike[] getAvailableBikes(int location_id, int fromHour, int toHour);
+	
 	
 }

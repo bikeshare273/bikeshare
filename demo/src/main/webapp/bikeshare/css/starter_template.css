@@ -6,7 +6,7 @@
 }
 
 .login_box {
-	padding-bottom: 2%;
+	padding-bottom: 15%;
 	background-color: #eee
 }
 
@@ -31,6 +31,7 @@
 	padding-bottom: 1%;
 	left: 34%;
 }
+
 
 .footer {
 	clear: both;
@@ -59,6 +60,7 @@
 	right: 16%;
 }
 
+
 .errorbox {
 	color: white;
 	font-style: italic;
@@ -79,6 +81,13 @@
 	right: 23%;
 }
 
+.navbar-header,
+.navbar-nav li a {
+    line-height: 150px;
+    height: 70px;
+    padding-top: 0;
+}
+
 .carousel_container {
 	padding-top: 4%;
 }
@@ -92,15 +101,94 @@
 .google_map_container{
 	padding-top: 7%;
 }
-.bikebookingform_input{
+
+.receipt_tabel{
+	width:100%;
+	border: 1px;
+	border-color: black;
+	border-style: solid;
+	border-width:medium;
+}
+/*
+.receipt_container{
+	padding-top: 10%;
+}
+*/
+.search_button{
 	padding-top: 1%;
 	padding-bottom: 1%;
+	left: 15%;
+	-moz-border-radius: 15px;
+ 	 -webkit-border-radius: 15px;
+  	border: 5px;
+ 	 padding: 5px;
+}
+
+.disable_textbox{
+	padding-top: 1%;
+	padding-bottom: 1%;
+	right-margin: 50%;
+	-moz-border-radius: 15px;
+ 	 -webkit-border-radius: 15px;
+  	border: 5px;
+ 	 padding: 5px;
+}
+
+.enter_zipcode{
+	padding-top: 1%;
+	padding-bottom: 1%;
+	right-margin: 50%
+
+}
+
+.from_time{
+	padding-top: 1%;
+	padding-bottom: 1%;
+	left: 3%;
+
+}
+
+.to_time{
+	padding-top: 1%;
+	padding-bottom: 1%;
+	left: 3%;
+
+}
+
+.bike_list{
+	padding-top: 1%;
+	padding-bottom: 1%;
+	left: 3%;
+}
+
+.confirm_booking_button{
+	padding-top: 1%;
+	padding-bottom: 1%;
+	left: 12%;
+	-moz-border-radius: 15px;
+ 	 -webkit-border-radius: 15px;
+  	border: 5px;
+ 	 padding: 5px;
+	
+}
+
+.text-vertical-center{
+	position: relative;
+	top: -170px;
 }
 
 
-.navbar-header,
-.navbar-nav li a {
-    line-height: 150px;
-    height: 70px;
-    padding-top: 0;
+.receipt_container{
+	border-collapse: collapse;
+	border-spacing: 4px;
 }
+
+.receipt_container, th, td {
+	border: 2px solid #cecfd5;
+  	padding-top: 10%;
+}
+
+.panel-body{
+	background:#9999A1;
+}
+

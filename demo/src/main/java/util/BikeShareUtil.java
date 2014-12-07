@@ -50,4 +50,11 @@ public class BikeShareUtil {
 		if(userDTO.getPassword() == null || userDTO.getPassword().trim() == "") message.add("password required");
 		return covertObjectArrayToStringArray(message);
 	}
+
+	public static String generateRandomBikeId(){
+		Random random = new Random();
+		return "b-"+random.nextInt(Integer.MAX_VALUE)  + 1 ;
+	}
+
+
 }
