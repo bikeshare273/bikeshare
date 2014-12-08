@@ -14,37 +14,51 @@ import com.twilio.sdk.resource.instance.Sms;
  * Created by gaurav on 12/2/14.
  */
 public class SendSMSNotifications {
-    /* Twilio REST API version */
     public static final String ACCOUNTSID = "AC7e5705f51fb6c9dd3b8b0a6c66390f51";
     public static final String AUTHTOKEN = "b0d8b73ee2d31d2dd6d7dd7baf939f4d";
+    public static final String twilioNumber = "408-512-3078";
 
-    public static void sendSMS(String toPhoneNumber,String Receiver){
+    public static void sendSMSOnReservation(String toPhoneNumber,String Receiver){
 
-        /* Instantiate a new Twilio Rest Client */
-        TwilioRestClient client = new TwilioRestClient(ACCOUNTSID, AUTHTOKEN);
-
-        // Get the account and call factory class
-        Account acct = client.getAccount();
-        SmsFactory smsFactory = acct.getSmsFactory();
-
-        String fromNumber = "408-512-3078";
         String toNumber = toPhoneNumber;
 
         //build map of post parameters
         Map<String,String> params = new HashMap<String,String>();
-        params.put("From", fromNumber);
+        params.put("From", twilioNumber);
         params.put("To", toNumber);
         params.put("Body", "Hi "+Receiver+"! This is Spartan Bike Share. Your bike reservation details are as follows.." +
                 "Have a safe ride!");
 
+
+        sendSMSUsingTwilio(params);
+    }
+
+    public static void sendSMSOnSignUp(String toPhoneNumber,String Receiver){
+
+        String toNumber = toPhoneNumber;
+
+        //build map of post parameters
+        Map<String,String> params = new HashMap<String,String>();
+        params.put("From", twilioNumber);
+        params.put("To", toNumber);
+        params.put("Body", "Hi "+Receiver+"! Welcome to Spartan Bike Share.");
+
+        sendSMSUsingTwilio(params);
+    }
+
+    public static void sendSMSUsingTwilio(Map<String,String> params){
         try {
-            // send an sms a call
-            // ( This makes a POST request to the SMS/Messages resource)
+            TwilioRestClient client = new TwilioRestClient(ACCOUNTSID, AUTHTOKEN);
+            Account acct = client.getAccount();
+            SmsFactory smsFactory = acct.getSmsFactory();
+
             Sms sms = smsFactory.create(params);
-            System.out.println("Success sending SMS: " + sms.getSid());
+            //System.out.println("Success sending SMS: " + sms.getSid());
         }
         catch (TwilioRestException e) {
             e.printStackTrace();
         }
     }
+
+
 }

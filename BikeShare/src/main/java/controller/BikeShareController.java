@@ -1,5 +1,7 @@
 package controller;
 
+import bikeshareimpl.TransactionsImpl;
+import bikeshareinterfaces.TransactionsInterface;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import resources.Bike;
 import resources.SmsNotifyUser;
+import resources.Transactions;
 import resources.User;
 import scala.Equals;
 
@@ -55,6 +58,7 @@ public class BikeShareController {
 
 	UserOperationInterface userOperationInterface = new UserOperationsImpl();
 	BikeOperationsInterface bikeOperationInterface = new BikeOperationsImpl();
+    TransactionsInterface transactionsInterface = new TransactionsImpl();
 		
 	@Bean
 	public FilterRegistrationBean shallowEtagHeaderFilter() {
@@ -91,6 +95,9 @@ public class BikeShareController {
 	public UserDTO getUser(@PathVariable String user_id) {
 		return userOperationInterface.getUser(user_id);
 	}
+
+
+// ----------------------------- Bike Resource Operations -------------------------
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/bikes", method = RequestMethod.POST)
@@ -132,12 +139,57 @@ public class BikeShareController {
 		bikeOperationInterface.updateBikeStatusToAvailable(bike_id);
 	}
 
+
+// ----------------------------- SMS Notifications Operations -------------------------
+
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/notifyUserBySms", method = RequestMethod.GET)
+    @RequestMapping(value = "/notifyUserBySms/OnReservation", method = RequestMethod.GET)
     @ResponseBody
     public void sendSMSNotification(@Valid @RequestBody SmsNotifyUser smsNotifyUser)
     {
-        SendSMSNotifications.sendSMS(smsNotifyUser.getToPhoneNumber(),smsNotifyUser.getReceiver());
+        SendSMSNotifications.sendSMSOnReservation(smsNotifyUser.getToPhoneNumber(),smsNotifyUser.getReceiver());
+    }
+
+// ----------------------------- Transaction Resource Operations -------------------------
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/transactions", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveTransaction(@Valid @RequestBody Transactions transactions)
+    {
+        transactionsInterface.addTransaction(transactions);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/transactions/{transaction_id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Transactions getSpecificTransaction(@PathVariable int transaction_id)
+    {
+        return transactionsInterface.getTransaction(transaction_id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/transactions/AllTransactions", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Transactions> getAllTransactions()
+    {
+        return transactionsInterface.getAllTransactions();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/transactions/cancel/{transaction_id}", method = RequestMethod.GET)
+    @ResponseBody
+    public void cancelTransaction(@PathVariable int transaction_id)
+    {
+        transactionsInterface.updateTransaction(transaction_id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/transactions/AllTransactions/{user_id}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Transactions> getAllUserTransactions(@PathVariable int user_id)
+    {
+        return transactionsInterface.getUserTransactions(user_id);
     }
 
 }
