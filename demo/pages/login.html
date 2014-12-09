@@ -1,0 +1,33 @@
+<div class="container-fluid login_box" ng-controller="loginformcontroller">
+          <div class="row">
+              <div class="col-xs-8 col-md-8">
+                  <div class="row">
+                      <div class="col-md-6">
+                      </div>
+                      <div class="container login_container col-md-6">
+                        <form>
+                          <div class="username_textbox">
+                            <input type="text" class="form-control" placeholder="username" ng-model="loginform_username" ng-maxlength="30" autofocus/>
+                          </div>
+                          <div class="password_textbox">
+                            <input type="text" class="form-control" placeholder="password" ng-model="loginform_password" ng-maxlength="20"/>
+                          </div>
+                          <div class="login_button">
+                              <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="loginform_getAuthenticated()">login</button>
+                            
+                          </div>
+                          <div class="register">
+                          	<a href="#signup">Don't have account? Register Now !!!</a>
+                          </div>
+                          <div class="errorbox">
+                          	{{loginform_error}}
+                          </div>
+
+                        </form>
+                      </div>
+                      <div class="col-md-6">
+                      </div>
+                  </div>
+              </div>
+           </div>
+      </div>

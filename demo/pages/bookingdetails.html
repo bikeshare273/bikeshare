@@ -1,0 +1,81 @@
+
+<div class="">
+      <div class="container">
+
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" >Welcome Rider!</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+               		<li>
+		                <a href="#bookingdetails" ng-hide="OffNavTabs">Booking Details</a>
+		            </li>
+              </ul>
+               <ul class="nav navbar-nav navbar-right">
+               		<li>
+		                <a href="#logout" ng-hide="OffLogoutTabs">Logout</a>
+		            </li>
+               </ul>
+            </div>
+          </div>
+        </nav>
+
+      </div>
+      
+    </div>
+    
+  
+
+
+<div class="bookingdetails_container" ng-controller="bookingdetailsController">
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-1">
+			</div>
+			<div class="col-md-10">
+					<table st-safe-src="queue.transactions" st-table="emptyArray" class="table table-striped">
+						<thead>
+						<tr>
+							<th class="bookingdetails_location">Location</th>
+							<th class="bookingdetails_time">Time</th>
+							<th class="bookingdetails_bikedetails">BikeDetails</th>
+							<th class="bookingdetails_bookingtime">Booking Time</th>
+							<th class="bookingdetails_cancelbooking"></th>
+							<!-- <th>email</th> -->
+						</tr>
+						</thead>
+						<tbody ng-hide="isLoading">
+						
+						<tr ng-repeat="row in emptyArray track by $index">
+							<td>{{row.location_name + "," + row.city + "," + row.state + "," + row.zipcode}}</td>
+							<td>{{row.from_hour + ":00 - " + row.to_hour + ":00"}}</td>
+							<td>{{row.bikename+" - " +row.biketype}}</td>
+							<td>{{row.date_of_booking | date}}</td>
+							<td><button class="btn btn-default bookingdetails_cancelbookingButton" ng-click="cancelBooking(row.transaction_id)" ng-show="row.active_booking">Cancel Booking</button></td>
+							<!-- <td><a ng-href="mailto:{{row.email}}">email</a></td> -->
+						</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="5" class="text-center">
+									<div st-pagination="" st-items-by-page="itemsByPage" ></div>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+
+			</div>
+			<div class="col-md-2">
+			</div>
+		</div>
+	</div>
+	
+</div>
