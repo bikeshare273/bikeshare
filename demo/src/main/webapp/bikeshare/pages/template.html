@@ -1,35 +1,7 @@
-<div>
-
-   <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-            <li class="sidebar-brand">
-                <a href="#top">Spartan Bike Share</a>
-            </li>
-            <li>
-                <a href="#top">Home</a>
-            </li>
-            <li>
-                <a href="#login">Login</a>
-            </li>
-            <li>
-                <a href="#signup">Sign Up</a>
-            </li>
-            <li>
-                <a href="#contact">Map</a>
-            </li>
-            <li>
-                <a href="#contactus">Contact</a>
-            </li>
-        </ul>
-    </nav>
-
-
-</div>
-
 
 <div>
+
+
 
 <!-- Header -->
     <div id="top" class="header">
@@ -45,43 +17,50 @@
  
  	<section id="login" class="login"> 
     		<div class="">
-    	
 			<div class="login_box" ng-controller="loginformcontroller">
-					<h2 align="center">Login</h2>
-                    <hr class="small">
-				
+				<h2 align="center" style="padding-top:7%">Login</h2>
+				<hr class="small">
 					 <div class="row text-center">
-					 <br>
-					 <br>
-					 <br>
 					  
 					 </div>
 					 
-								<form>
+								<form name="loginform">
 								<div class="row">
-							 	<div class="col-md-4 username_textbox">
-							 	<br>
-										<input type="text" class="form-control" placeholder="Username"
-											ng-model="loginform_username" ng-maxlength="30" size="20"
+								 	<div class="col-md-4 username_textbox">
+								 	<br>
+										<input type="text" class="form-control" placeholder="Username" name="loginform_username"
+											ng-model="loginform_username" size="20" required
 											autofocus />
+											<div class="error-container"
+											 		ng-show="loginform.loginform_username.$dirty && loginform.loginform_username.$invalid">
+												<small class="errorbox1"
+												ng-show="loginform.loginform_username.$error.required">Username is required</small> 
+											</div>
 									</div>
+										
 								</div>
 								<br>
 								<div class="row">
 									<div class="col-md-4 password_textbox">
 									
-									
-										<input type="password" class="form-control" placeholder="Password"
-											ng-model="loginform_password" ng-maxlength="20" />
+										<input type="password" class="form-control" placeholder="Password" name="loginform_password"
+											ng-model="loginform_password"  required/>
+											
+										<div class="error-container"
+									 		ng-show="loginform.loginform_password.$dirty && loginform.loginform_password.$invalid">
+											<small class="errorbox1"
+											ng-show="loginform.loginform_password.$error.required">Password is required</small> 
+										</div>
+										
 									</div>
 									
-									</div>
+								</div>
 									<br>
 									
 									<!-- Button -->
 									<div class="row">
 								<div class="col-md-4 login_button">
-										<button class="btn btn-lg btn-primary btn-block" type="button"
+										<button class="btn btn-lg btn-primary btn-block" type="button" ng-disabled="loginform.$invalid"
 											ng-click="loginform_getAuthenticated()">Login</button>
 
 									</div>
@@ -128,7 +107,7 @@
         <div class="container">
             <div class="row text-center">
              <!--     <div class="col-lg-10 col-lg-offset-1"> -->
-                    <h2 >Sign Up</h2>
+                    <h2 style="padding-top:7%">Sign Up</h2>
                     <hr class="small">
                 	<div class="container-fluid signup_container" ng-controller="signupformcontroller">
 				<div class="">
@@ -136,14 +115,13 @@
 						<div class="">
 							<div class=""></div>
 							<div class="">
-								<form name="signupform	">
+								<form name="signupform">
 								<div class="row">
 										<div class="col-md-4"></div>
 									<div class="input-group input-group-lg register_textbox">
-										<input type="text" class="form-control" placeholder="Name"
+										<input type="text" class="form-control" placeholder="Name" name="signupform_name"
 											ng-model="signupform_name" size="40" ng-minlength="3" ng-maxlength="40" required />
 											<br>
-											<div class="col-md-4"></div>
 										<div class="error-container" ng-show="signupform.signupform_name.$dirty && signupform.signupform_name.$invalid">
 											<small class="errorbox"
 													ng-show="signupform.signupform_name.$error.required">Name is required</small> <small class="errorbox"
@@ -151,10 +129,7 @@
 													Name is required to be at least 3 characters</small> <small
 													class="errorbox"
 													ng-show="signupform.signupform_name.$error.maxlength">Your
-													name cannot be longer than 20 characters</small> <small class="errorbox"
-													ng-show="signupform.signupform_name.$error.unique">That
-													name is taken, please try another
-											</small>
+													name cannot be longer than 20 characters</small>
 										</div>
 									
 									</div>
@@ -164,7 +139,7 @@
 										<div class="col-md-4"></div>	
 									<div class="input-group input-group-lg  register_textbox">
 										<input type="email" class="form-control" placeholder="E-mail e.g. joesmith@gmail.com "
-											name="signupform_email" size="40" ng-model="signupform_email" required />
+											name="signupform_email" size="40" ng-model="signupform_email" required email-unique />
 								
 										<div class="error-container"
 											ng-show="signupform.signupform_email.$dirty && signupform.signupform_email.$invalid">
@@ -174,7 +149,7 @@
 											ng-show="signupform.signupform_email.$error.email">Email id is invalid</small>
 											<small class="errorbox"
 											ng-show="signupform.signupform_email.$error.unique">That
-											email is taken, please try another</small>
+											email is already taken, please try another</small>
 										</div>
 								
 									</div>
@@ -219,7 +194,7 @@
 									<div class="row">
 										<div class="col-md-4"></div>
 											<div class="input-group input-group-lg  register_textbox">
-							<input type="text" class="form-control" ng-minlength="5" placeholder="Zipcode" name="signupform_zipcode"
+							<input type="text" class="form-control" ng-minlength="5" ng-maxlength="5" placeholder="Zipcode" name="signupform_zipcode"
 												size="40" ng-model="signupform_zipcode" required>
 										
 												<div class="error-container"
@@ -227,7 +202,7 @@
 														<small class="errorbox"
 														ng-show="signupform.signupform_zipcode.$error.required">Zipcode is required</small> 
 														<small class="errorbox" ng-show="signupform.signupform_zipcode.$error.minlength">Zipcode is required to have at least 5 digits</small>
-														
+														<small class="errorbox" ng-show="signupform.signupform_zipcode.$error.maxlength">Zipcode can not have more than 5 digits</small>
 										
 												</div>
 						
@@ -235,16 +210,19 @@
 									</div>
 									
 									<br>
-									<div class="row">
+									<div class="row" >
 										<div class="col-md-4"></div>
 											<div class="input-group input-group-lg  register_textbox">
-							<input type="text" class="form-control" placeholder="Username" name="signupform_username"
-												size="40" ng-model="signupform_username" required>
+							<input type="text" class="form-control" placeholder="Username" name="signupform_username" 
+										size="40" ng-model="signupform_username" required name-unique  />
+									
 									
 										<div class="error-container"
 												ng-show="signupform.signupform_username.$dirty && signupform.signupform_username.$invalid">
 												<small class="errorbox"
 												ng-show="signupform.signupform_username.$error.required">Username is required</small> 
+												<small class="errorbox"
+												ng-show="signupform.signupform_username.$error.unique">Username is already taken</small> 
 										</div>
 									
 									</div>
@@ -272,7 +250,7 @@
 										<div class="col-md-4"></div>
 										<div class="input-group input-group-lg register_button">
 											<span class="input-group-btn">
-												<button class="btn btn-default" type="reset" ng-click="signupform_signup()" size="20">Register</button>
+												<button ng-disabled="signupform.$invalid" class="btn btn-default" type="reset" ng-click="signupform_signup()" size="20">Register</button>
 											</span>
 										</div>
 									</div>
@@ -280,7 +258,7 @@
 										<div class="col-md-4"></div>
 										<div class="errorbox" style="position:relative;padding-top:1%;padding-left:30%;">
 											<ul>
-												<li ng-repeat="error in signupform_error">{{ error }}</li>
+												<li ng-repeat="error in signupform_error track by $index">{{ error }}</li>
 											</ul>
 										</div>
 										
@@ -305,18 +283,27 @@
         <!-- /.container -->
     </section>
 
-
+	<section id="contact" class="map">
+       <!-- <iframe width="100%" height="100%" frameborder="0" scrolling="no"  marginheight="0" marginwidth="0" src="../images/static_map.png"></iframe>
+       <br /> 
+      <small> 
+      <a href="../images/static_map.png"></a>         
+       </small>
+     </iframe> -->
+     
+     	<div ng-include src="googlemap" onload='getLocation()' id="mapp"></div>
+    </section>
 	 
 	 
     
-    <section id="contact" class="map">
+   <!--  <section id="contact" class="map">
         <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
         <br />
         <small>
             <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
         </small>
         </iframe>
-    </section>
+    </section> -->
 
 
 
@@ -391,8 +378,9 @@
         });
     });
     
-
     </script>
+
+   
     
 
 </div>

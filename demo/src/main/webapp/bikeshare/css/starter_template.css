@@ -6,7 +6,7 @@
 }
 
 .login_box {
-	padding-bottom: 15%;
+	padding-bottom: 8%;
 	background-color: #eee
 }
 
@@ -70,12 +70,11 @@
 .errorbox1 {
 	color: red;
 	font-style: italic;
-	margin-left: 550px;
+	margin-left: 40%;
 }
 
 .successbox {
 	color: lawngreen;
-	font-style: italic;
 	font-style: normal;
 	font: 18px arial;
 	right: 23%;
@@ -99,9 +98,12 @@
 	height: 600px;
 }
 .google_map_container{
-	padding-top: 7%;
+	padding-top: 5%;
 }
-
+.bikebookingform_input{
+	padding-top: 1%;
+	padding-bottom: 1%;
+}
 .receipt_tabel{
 	width:100%;
 	border: 1px;
@@ -109,11 +111,6 @@
 	border-style: solid;
 	border-width:medium;
 }
-/*
-.receipt_container{
-	padding-top: 10%;
-}
-*/
 .search_button{
 	padding-top: 1%;
 	padding-bottom: 1%;
@@ -122,6 +119,7 @@
  	 -webkit-border-radius: 15px;
   	border: 5px;
  	 padding: 5px;
+ 	 text-align: center;
 }
 
 .disable_textbox{
@@ -143,20 +141,20 @@
 
 .from_time{
 	padding-top: 1%;
-	padding-bottom: 1%;
+	padding-bottom: 1.5%;
 	left: 3%;
 
 }
 
 .to_time{
 	padding-top: 1%;
-	padding-bottom: 1%;
+	
 	left: 3%;
 
 }
 
 .bike_list{
-	padding-top: 1%;
+	
 	padding-bottom: 1%;
 	left: 3%;
 }
@@ -169,7 +167,7 @@
  	 -webkit-border-radius: 15px;
   	border: 5px;
  	 padding: 5px;
-	
+	text-align : center;
 }
 
 .text-vertical-center{
@@ -181,14 +179,80 @@
 .receipt_container{
 	border-collapse: collapse;
 	border-spacing: 4px;
+	border-top:3px solid #e5eff8;
+	border-right:3px solid #e5eff8;
+	margin:1em auto;
+	background-image: url("../images/black_bike.jpg");
+	/*height: 800px; width: 1280px; */
+	background-size: 100%;
+	padding-top: 10%;
+	padding-bottom: 20%;
+	border-style: solid;
+	/*border-width: thick;*/
 }
 
-.receipt_container, th, td {
-	border: 2px solid #cecfd5;
+
+/*
+.receipt_container tr, td {
+	border: 4px solid #FFFFFF;
   	padding-top: 10%;
+  	border-style : groove;
+  	font-size:18px;
+  	color:#D0D0D0;
+  	text-align:center;
+  	
+}
+.receipt_container tr{
+	background-color: white;
+	color: white;
+}
+*/
+
+
+
+
+.receipt_row{
+	border: 4px solid #FFFFFF;
+  	padding-top: 10%;
+  	border-style : groove;
+  	font-size:18px;
+  	color:#D0D0D0;
+  	text-align:center;
 }
 
 .panel-body{
 	background:#9999A1;
 }
 
+.panel-heading{
+	text-align:center;
+	font-size: 18px;
+}
+.bookingdetails_container{
+	padding-left: 5%;
+	padding-top:10%;
+}
+.bookingdetails_location{
+	width:30%;
+}
+.bookingdetails_time{
+	width:25%;
+}
+.bookingdetails_bikedetails{
+	width:25%;
+}
+.bookingdetails_bookingtime{
+	width:30%;
+}
+.bookingdetails_cancelbooking{
+	width:30%;
+}
+.bookingdetails_cancelbookingButton{
+	
+}
+.showNoBikesAvailable{
+	color: red;
+	font-style: normal;
+	padding-left: 33%;
+	padding-top: 2%;
+}
