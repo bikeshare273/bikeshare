@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+  <title>Google Maps Multiple Markers</title> 
+  <script src="http://maps.google.com/maps/api/js?sensor=false" 
+          type="text/javascript"></script>
+</head> 
+<body>
+  <div id="map" style="width: 900px; height: 750px;"></div>
+
+  <script type="text/javascript">
+    var locations = [
+				['1',  37.345623, -121.884722, 4, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['2', 37.258372, -121.918866, 5, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['4', 37.368830, -122.036350, 2, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['5', 37.354108, -121.955236, 1, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['6', 37.441883, -122.143019, 1, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['7', 37.335438, -121.884972, 1, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['8', 37.344083, -121.873934, 1, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['9', 37.333682, -121.890022, 1, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['10', 37.339085, -121.891481, 1, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['11', 37.337621, -121.861749, 1, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['12', 37.348463, -121.895421, 1, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png'],
+				['13', 37.339386, -121.861749, 1, 'http://maps.google.com/mapfiles/kml/shapes/motorcycling.png']
+    		];
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: new google.maps.LatLng(37.339386, -121.894955),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        icon: "http://maps.google.com/mapfiles/kml/shapes/motorcycling.png",
+        map: map        
+      });
+
+      google.maps.event.addListener(marker, (function(marker, i) {
+        return function() {
+            infowindow.setContent('Cycle no.' + locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  </script>   
+</body>
+</html>
