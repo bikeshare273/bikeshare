@@ -1,5 +1,7 @@
 package controller;
 
+import org.hibernate.validator.constraints.Email;
+import org.joda.time.DateTime;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
@@ -14,13 +16,19 @@ import org.springframework.context.annotation.Configuration;
 
 import interceptors.SessionValidatorInterceptor;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
 import resources.Bike;
+import resources.LocationEntity;
 import resources.LocationInventory;
 import resources.User;
+import resources.Transactions;
+import util.BikeShareUtil;
+import util.EmailNotification;
+import util.SendSMSNotifications;
 
 import java.util.*;
 
@@ -50,11 +58,16 @@ import DTO.UserDTO;
 import DTO.BookingDTO;
 import bikeshareimpl.AuthInterfaceImpl;
 import bikeshareimpl.BikeOperationsImpl;
+import bikeshareimpl.LocationEntityOperations;
 import bikeshareimpl.LocationInvetoryOperations;
+import bikeshareimpl.TransactionsImpl;
+import bikeshareimpl.UserDAOImpl;
 import bikeshareimpl.UserOperationsImpl;
 import bikeshareinterfaces.AuthInterface;
 import bikeshareinterfaces.BikeOperationsInterface;
+import bikeshareinterfaces.LocationEntityInterface;
 import bikeshareinterfaces.LocationInventoryInterface;
+import bikeshareinterfaces.TransactionsInterface;
 import bikeshareinterfaces.UserOperationInterface;
 
 @Component
@@ -67,7 +80,13 @@ public class BikeShareController  extends WebMvcConfigurerAdapter{
 	AuthInterface authInterface = new AuthInterfaceImpl();
 	LocationInventoryInterface LocationInventoryOps = new LocationInvetoryOperations();
 	public static String globalReservationIndicator = "RESERVED";
-
+	public static String globalCancellationIndicator = "CANCELLED";
+	public static String globalAvailableIndicator = "AVAILABLE";
+	private static int UserCreationCredit = 5;
+	private static int userReservationCredit = 1;
+	private static int freeRideCredit = 10;
+	
+	
 	@Bean
 	public FilterRegistrationBean shallowEtagHeaderFilter() {
 
@@ -78,7 +97,6 @@ public class BikeShareController  extends WebMvcConfigurerAdapter{
 		urlPatterns.add("/api/v1/users/*");
 		etagBean.setUrlPatterns(urlPatterns);
 		return etagBean;
-
 	}
 	
     @Bean
@@ -88,15 +106,54 @@ public class BikeShareController  extends WebMvcConfigurerAdapter{
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(sessionValidatorInterceptor()).addPathPatterns(
-        		"/api/v1/users/*");
+        registry.addInterceptor(sessionValidatorInterceptor()).addPathPatterns(	"/api/v1/users/*");
+        registry.addInterceptor(sessionValidatorInterceptor()).addPathPatterns(	"/api/v1/loggedin");
     }
- 
+    
+    //check unique username
+    @ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/checkUniqueUsername/{user_name}", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean checkUniqueUsername(@PathVariable String user_name) {
+		return userOperationInterface.checkUniqueUsername(user_name);
+	}
+    
+  //check unique email
+    @ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/checkUniqueEmail/{email:.+}", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean checkUniqueEmail(@PathVariable String email) {
+		return userOperationInterface.checkUniqueEmail(email);
+	}
+    
+    
+    
+    //logged in
+    
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/loggedin", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean checkLoggedIn(){
+    	return true;
+    }
+         
    	// User Related Operations
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	@ResponseBody
 	public UserDTO createUser(@Valid @RequestBody UserDTO user) {
+		
+		user.setPassword(BikeShareUtil.passwordEncrypter(user.getPassword()));
+		user.setCredits_earned(UserCreationCredit);
+		
+				
+		SendSMSNotifications.sendSMSOnSignUp(user.getPhone(), user.getName());
+		try{
+			EmailNotification.sendEmailonSignUp(user.getEmail(), user.getUsername());
+		}catch(UnsupportedEncodingException e)
+		{
+			System.out.println(e.getMessage());
+		}		
 		return userOperationInterface.createUser(user);
 	}
 
@@ -121,8 +178,20 @@ public class BikeShareController  extends WebMvcConfigurerAdapter{
 		loginDTO = authInterface.login(loginDTO);
         response.addCookie(new Cookie("sessionid", loginDTO.getSessionId()));
         response.addCookie(new Cookie("username", loginDTO.getUsername()));
+        response.addCookie(new Cookie("user_id", Integer.toString(loginDTO.getUser_id())));
         return loginDTO;
 	}
+	
+	@RequestMapping("/logout")
+	@ResponseBody
+	private boolean logout(HttpServletResponse response) {
+		
+        response.addCookie(new Cookie("sessionid", ""));
+        response.addCookie(new Cookie("username", ""));
+        response.addCookie(new Cookie("user_id", ""));
+        return true;
+	}
+	
 	
 	// Location Inventory Related Function - To be used for Checking Availability, Bike Reservation and Cancellation. 
 	@RequestMapping("/availability")
@@ -132,89 +201,414 @@ public class BikeShareController  extends WebMvcConfigurerAdapter{
 		int location_id = bookingDTO.getLocation_id();
 		int fromHour= bookingDTO.getFromHour();
 		int toHour = bookingDTO.getToHour();
+		
 		Bike [] bikes;				
 		
 		bikes = LocationInventoryOps.getAvailableBikes(location_id, fromHour, toHour);
-						
+				
+		
+		if(bikes!=null && bikes.length > 0 && bikes[0]==null){
+			return null;
+		}
+		
 		return bikes;
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping("/reserve")
 	@ResponseBody
-	private LocationInventory updateInvForReservation(@RequestBody BookingDTO bookingDTO, HttpServletResponse response)
+	private BookingDTO updateInvForReservation(@RequestBody BookingDTO bookingDTO, @CookieValue("user_id") int user_id) 
 	{
 		
 		int location_id = bookingDTO.getLocation_id();
 		int fromHour= bookingDTO.getFromHour();
 		int toHour = bookingDTO.getToHour();
 		String bikeID = bookingDTO.getBike_id();
+		BookingDTO booking = new BookingDTO();
+		
+		BikeOperationsInterface bikeOps = new BikeOperationsImpl();
+		Bike bike = new Bike();
+		bike = bikeOps.getBike(bikeID);
+		
+				
+		Transactions tx = new Transactions();
+		LocationEntity loc = new LocationEntity();
+		User user = new User();
+		
+		
+		TransactionsInterface txOps = new TransactionsImpl();
+		LocationEntityInterface locOps = new LocationEntityOperations();
+		UserDAOImpl userOps = new UserDAOImpl();
+		
+		booking = LocationInventoryOps.updateInvForReservation(location_id, fromHour, toHour, bikeID);
+		
+		if(booking.isReserve_success())
+		{
 			
-		LocationInventory loc = LocationInventoryOps.updateInvForReservation(location_id, fromHour, toHour, bikeID);
-	
-		return loc;
+			bikeOps.updateBikeStatusToReserved(bikeID);			
+			loc = locOps.getLocation(location_id);
+			user = userOps.getObject(user_id+"");
+			bike.setStatus(globalReservationIndicator);
+			
+			tx.setBooked_bike_id(bikeID);
+			tx.setLocation_id(location_id);
+			tx.setFrom_hour(fromHour);
+			tx.setTo_hour(toHour);
+			tx.setUser_id(user_id);
+			tx.setTransaction_id(BikeShareUtil.generateTransactionID(location_id, fromHour, toHour));
+			if(bike!=null)
+			{	
+			tx.setBikename(bike.getBikename());
+			tx.setBiketype(bike.getType());
+			tx.setBikeStatus(bike.getStatus());
+			tx.setPrice(bike.getPrice());
+			}
+			if(loc!=null)
+			{	
+			tx.setCity(loc.getCity());
+			tx.setLocation_name(loc.getLocation_name());
+			tx.setZipcode(loc.getZipcode());
+			tx.setState(loc.getState());
+			}
+			
+			if(user!=null)
+			{	
+			
+			if(user.getCredits_earned() >= freeRideCredit)	
+			{
+				tx.setFreeRide(true);
+				booking.setFreeRide(true);
+				tx.setCredit_used(true);
+				user.setCredits_earned(user.getCredits_earned() - freeRideCredit); 
+			}
+			else
+			{
+				tx.setFreeRide(false);
+				booking.setFreeRide(false);
+				tx.setCredit_used(false);
+				user.setCredits_earned(user.getCredits_earned() + userReservationCredit);
+				tx.setCredited_amount(userReservationCredit);
+			}	
+			
+			}
+			
+			tx.setLocation_name(loc.getLocation_name());
+			tx.setZipcode(loc.getZipcode());
+			tx.setState(loc.getState());
+			
+			userOps.updateObject(user);
+			txOps.addTransaction(tx);
+			
+			booking.setTransaction_id(tx.getTransaction_id());
+			booking.setUser_id(user_id);
+			booking.setSuccessMessage(globalReservationIndicator);
+			
+			System.out.println("phone no "+user.getPhone());
+								
+			SendSMSNotifications.sendSMSOnReservation(user.getPhone(), user.getName(), tx.getLocation_name(), tx.getFrom_hour(), tx.getTo_hour(), tx.getBikename());
+			try{
+				EmailNotification.sendEmailonReservation(user.getEmail(), user.getName(), tx.getLocation_name(), fromHour, toHour, tx.getTransaction_id(), tx.getBikename(), ("E" + BikeShareUtil.getRandomInteger()));
+			}catch(UnsupportedEncodingException e)
+			{
+				System.out.println(e.getMessage());
+			}
+		}	
+
+		return booking;
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping("/cancel")
 	@ResponseBody
-	private LocationInventory updateInvForCancellation(@RequestBody BookingDTO bookingDTO, HttpServletResponse response)
+	private BookingDTO updateInvForCancellation(@RequestBody BookingDTO bookingDTO, @CookieValue("user_id") int user_id)
 	{
+		TransactionsInterface txOps = new TransactionsImpl();
 		
-		int location_id = bookingDTO.getLocation_id();
-		int fromHour= bookingDTO.getFromHour();
-		int toHour = bookingDTO.getToHour();
-		String bikeID = bookingDTO.getBike_id();
+		Transactions txn = new Transactions();
+		User user = new User();
 		
-		LocationInventory loc = LocationInventoryOps.updateInvForCancellation(location_id, fromHour, toHour, bikeID);
+		txn = txOps.getTransaction(bookingDTO.getTransaction_id());
 	
-		return loc;
+		if(txn.getBooking_status().equalsIgnoreCase(globalReservationIndicator))
+		{	
+		int location_id = txn.getLocation_id();
+		int fromHour= txn.getFrom_hour();
+		int toHour = txn.getTo_hour();
+		String bikeID = txn.getBooked_bike_id();
+		
+		BookingDTO booking = new BookingDTO();
+		BikeOperationsInterface bikeOps = new BikeOperationsImpl();
+		UserDAOImpl userOps = new UserDAOImpl();
+		
+		booking = LocationInventoryOps.updateInvForCancellation(location_id, fromHour, toHour, bikeID);
+	
+		if(booking.isCancel_success())
+		{
+			user = userOps.getObject(user_id+"");
+			
+			if(txn.isFreeRide())
+			{ 
+				user.setCredits_earned(user.getCredits_earned() + freeRideCredit);
+				txn.setCredited_amount(freeRideCredit);	
+			}
+			else
+			{ 
+				user.setCredits_earned(user.getCredits_earned() - userReservationCredit);	
+				txn.setCredited_amount(userReservationCredit);
+			}
+						
+			bikeOps.updateBikeStatusToAvailable(bikeID);
+					
+			txOps.updateTransaction(bookingDTO.getTransaction_id());
+			userOps.updateObject(user);
+			booking.setTransaction_id(bookingDTO.getTransaction_id());
+			booking.setUser_id(user_id);
+			booking.setSuccessMessage(globalCancellationIndicator);
+			
+			SendSMSNotifications.sendSMSOnCancellation(user.getPhone(), bookingDTO.getTransaction_id());
+			try{
+				EmailNotification.sendEmailonCancellation(user.getEmail(), user.getName(), txn.getLocation_name(), txn.getFrom_hour(), txn.getTo_hour(), txn.getTransaction_id());
+			}catch(UnsupportedEncodingException e)
+			{
+				System.out.println(e.getMessage());
+			}
+		}
+		return booking;
+		}
+		else {return null;}	
 	}
 	
-}
+	@RequestMapping(value = "/transactions", method = RequestMethod.GET )
+	@ResponseBody
+	private Transactions [] getTransactions(@CookieValue("user_id") int user_id) 
+	{ 		
+		List<Transactions> txList = new ArrayList<Transactions>();
 
+		TransactionsInterface txOps = new TransactionsImpl();	
+
+		DateTime now = DateTime.now();
+
+		int hourOfTheDay = now.getHourOfDay();
+		Transactions [] tx;
+		txList =  txOps.getUserTransactions(user_id);
+
+		int size = txList.size();
+
+		tx = new Transactions[size];
+
+		for(int i=0; i<size; i++)
+
+		{ 
+
+			if(txList.get(i).getDate_of_booking().getDayOfYear() >= now.getDayOfYear()) 
+			{	
+				if (txList.get(i).getFrom_hour() > hourOfTheDay)
+				{
+					txList.get(i).setActive_booking(true);
+				}
+			}
+			else
+			{
+				txList.get(i).setActive_booking(false);
+			}
+
+			tx[i] = txList.get(i);
+		}
+
+
+		return tx;
+	}
+	
+	
+	@RequestMapping(value = "/locations", method = RequestMethod.GET )
+	@ResponseBody
+	private LocationEntity [] getLocations( )
+	{ 		
+		List<LocationEntity> locationList = new ArrayList<LocationEntity>();
 		
+		LocationEntityInterface locOps = new LocationEntityOperations();	
+
+		LocationEntity [] locations;
+		locationList =  locOps.getLocations();
+						
+		int size = locationList.size();
+		
+		locations = new LocationEntity[size];
+		
+		for(int i=0; i<size; i++)
+		
+		{ 
+			locations[i] = locationList.get(i);
+		}
+		
+		return locations;
+	}
+	
+	
+	@RequestMapping("/bikes")
+	@ResponseBody
+	private Bike [] getBikes( )
+	{ 		
+		List<Bike> bikeList = new ArrayList<Bike>();
+		
+		BikeOperationsInterface bikeOps = new BikeOperationsImpl();	
+
+		Bike [] bikess;
+		bikeList =  bikeOps.getAllBikes();
+						
+		int size = bikeList.size();
+		
+		bikess = new Bike[size];
+		
+		for(int i=0; i<size; i++)
+		
+		{ 
+			bikess[i] = bikeList.get(i);
+		}
+		
+		return bikess;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping("/onebike")
+	@ResponseBody
+	private Bike getBike( )
+	{ 		
+		List<Bike> bikeList = new ArrayList<Bike>();
+		
+		BikeOperationsInterface bikeOps = new BikeOperationsImpl();	
+
+		Bike [] bikess;
+		bikeList =  bikeOps.getAllBikes();
+						
+		int size = bikeList.size();
+		
+		bikess = new Bike[size];
+		
+		for(int i=0; i<size; i++)
+		
+		{ 
+			bikess[i] = bikeList.get(i);
+		}
+		
+		return bikess[0];
+	}
+	
+	
+	
+	
+	
 	
 
-
-
+	
+		
+		
+/*General Purpose Function to Load Location DataBaste - Please don't remove
+	@RequestMapping("/loadDatabase")
+	@ResponseBody
+	private void loadTable() {
+		
+		LocationEntity loc = new LocationEntity();
+		LocationEntityInterface locOps = new LocationEntityOperations();
+		int location_id = 95112;
+		
+		for(int i=0; i<10;i++)
+		{
+			loc.setLocation_id(location_id);
+			loc.setCity("San Jose");
+			loc.setZipcode(location_id);
+			loc.setState("California");
+			loc.setLatitude("Something");
+			loc.setLongitude("Something");
+			loc.setLocation_capacity(11);
+						
+			location_id += 3;
+			
+			locOps.addLocation(loc);
+		}
 	
 	
+	}
+}*/
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/* GENERAL PURPOSE FUNCTIONS - PLEASE DON'T REMOVE
+	// GENERAL PURPOSE FUNCTIONS - PLEASE DON'T REMOVE
 	
 	
 	//General Purpose Function to Load Location DataBaste - Please don't remove
@@ -227,6 +621,9 @@ public class BikeShareController  extends WebMvcConfigurerAdapter{
 	
 	}
 	
+}
+	
+	/*
 	//General Purpose Function to test Location Inventory - Please don't remove
 	@RequestMapping("/getLocation")
 	@ResponseBody
