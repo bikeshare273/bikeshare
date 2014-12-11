@@ -14,6 +14,8 @@ import util.MongodbConnection;
 import bikeshareinterfaces.LocationInventoryInterface;
 import bikeshareinterfaces.BikeOperationsInterface;
 import resources.Bike;
+import DTO.BookingDTO;
+
 
 public class LocationInvetoryOperations implements LocationInventoryInterface 
 {
@@ -158,6 +160,12 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 		
 		fetchedArrayOfAvailableBikes = getInvForSeveralHoursAtOneLocationWithOnlyAvailableBikes(location_id, fromHour, toHour);
 		
+		if(fetchedArrayOfAvailableBikes == null)
+		{
+			return null;
+			
+		}
+				
 		arrayofAvailableBikes = new Bike[fetchedArrayOfAvailableBikes.length];
 		
 		for(int i = 0; i< fetchedArrayOfAvailableBikes.length; i++ )
@@ -174,48 +182,99 @@ public class LocationInvetoryOperations implements LocationInventoryInterface
 	// For Booking : bikeId = Reserved Bike ID     and    reservationIndicator = reservationIndicatorString like "BIKE-RESERVED" 
 	// For Cancellation : bikeID = reservationIndicatorString     and    reservationIndicator = bikeID for which booking has been cancelled
 	
-	public LocationInventory updateInvForReservation(int location_id, int fromHour, int toHour,  String bikeID)
+	public BookingDTO updateInvForReservation(int location_id, int fromHour, int toHour,  String bikeID)
 	
 	{
 		     
-	    LocationInventory loc_inv = new LocationInventory();
-
-	    Query query = new Query();
-	    query.addCriteria(Criteria.where("location_id").is(location_id));
-
-	    loc_inv = mongoTemplate.findOne(query, LocationInventory.class,"Location_Inventory");
+	    BookingDTO booking = new BookingDTO(); 
 		
-	    LocationInventory updated_loc_inv = updateInventory(loc_inv, fromHour, toHour, bikeID, BikeShareController.globalReservationIndicator +" - " + bikeID ) ;//new LocationInventory();
+		LocationInventory loc_inv = null;
+	
+		Query query = new Query();
 	    
-	   Update update = getUpdate(updated_loc_inv, fromHour, toHour);
-	         
-	    mongoTemplate.updateFirst(query, update, LocationInventory.class, "Location_Inventory");
+	    query.addCriteria(Criteria.where("location_id").is(location_id));
+	    loc_inv = mongoTemplate.findOne(query, LocationInventory.class,"Location_Inventory");
 	    
-	    return updated_loc_inv;
+	    if (loc_inv != null)
+	    {	    
+	       booking.setReserve_success(true);
+	       booking.setLocation_id(location_id);
+	       booking.setFromHour(fromHour);
+	       booking.setToHour(toHour);
+	       booking.setBike_id(bikeID);
+	       booking.setCancel_success(false);
+	       booking.setErrorMessage(null);
+	       
+	       LocationInventory updated_loc_inv = updateInventory(loc_inv, fromHour, toHour, bikeID, BikeShareController.globalReservationIndicator +" - " + bikeID ) ;//new LocationInventory();
+		    
+		    Update update = getUpdate(updated_loc_inv, fromHour, toHour);
+		         
+		    mongoTemplate.updateFirst(query, update, LocationInventory.class, "Location_Inventory");
+	     
+	    }
+	       
+	    else
+	    {
+	    	
+	    	booking.setReserve_success(false);
+		    booking.setLocation_id(location_id);
+		    booking.setFromHour(fromHour);
+		    booking.setToHour(toHour);
+		    booking.setBike_id(bikeID);
+		    booking.setCancel_success(false);
+		    booking.setErrorMessage("Record not found !");
+	    }
+	   
+	    return booking;
 	    
 	}
 	    
 /*********************************************************************************************************/
 	
-public LocationInventory updateInvForCancellation(int location_id, int fromHour, int toHour,  String bikeID)
+public BookingDTO updateInvForCancellation(int location_id, int fromHour, int toHour,  String bikeID)
 	
 	{
-		     
-	   LocationInventory loc_inv = new LocationInventory();
+		  
+	BookingDTO booking = new BookingDTO(); 
+	
+	LocationInventory loc_inv = null;
 
-	    Query query = new Query();
-	    query.addCriteria(Criteria.where("location_id").is(location_id));
-
-	    loc_inv = mongoTemplate.findOne(query, LocationInventory.class,"Location_Inventory");
-		
-	    LocationInventory updated_loc_inv = new LocationInventory();
+	Query query = new Query();
+    
+    query.addCriteria(Criteria.where("location_id").is(location_id));
+    loc_inv = mongoTemplate.findOne(query, LocationInventory.class,"Location_Inventory");
+    
+    if (loc_inv != null)
+    {	    
+       booking.setReserve_success(false);
+       booking.setLocation_id(location_id);
+       booking.setFromHour(fromHour);
+       booking.setToHour(toHour);
+       booking.setBike_id(bikeID);
+       booking.setCancel_success(true);
+       booking.setErrorMessage(null);
+       
+       LocationInventory updated_loc_inv = updateInventory(loc_inv, fromHour, toHour, BikeShareController.globalReservationIndicator +" - " + bikeID, bikeID ) ;//new LocationInventory();
 	    
-	    updated_loc_inv = updateInventory(loc_inv, fromHour, toHour, BikeShareController.globalReservationIndicator +" - " + bikeID, bikeID) ;
-	    		
-	    Update update = getUpdate(updated_loc_inv, fromHour, toHour );
-        mongoTemplate.updateFirst(query, update, LocationInventory.class, "Location_Inventory");
-	    
-	    return updated_loc_inv;
+	    Update update = getUpdate(updated_loc_inv, fromHour, toHour);
+	         
+	    mongoTemplate.updateFirst(query, update, LocationInventory.class, "Location_Inventory");
+     
+    }
+       
+    else
+    {
+    	
+    	booking.setCancel_success(false);
+    	booking.setLocation_id(location_id);
+	    booking.setFromHour(fromHour);
+	    booking.setToHour(toHour);
+	    booking.setBike_id(bikeID);
+	    booking.setReserve_success(false);
+	    booking.setErrorMessage("Record not found !");
+    }
+   
+    return booking;
 		    
 	}
 	
@@ -226,14 +285,43 @@ public static void loadDatabase()
 
 LocationInventory loc = new LocationInventory();
 
-int location_id = 95112;
+//int location_id = 95110;
 
 
- for (int i = 0; i<10; i++)
+int [] locationids = {95111, 95112, 95113, 95114, 95116, 95120,95053,95119,95126,95115 };
+
+
+String [] hour1 = {"900", "901", "902", "903", "904"};
+String [] hour2 = {"905", "906", "907", "908", "909"};
+String [] hour3 = {"910", "911", "912", "913", "914"};
+String [] hour4 = {"915", "916", "917", "918", "919"};
+String [] hour5 = {"920", "921", "922", "923", "924"};
+String [] hour6 = {"925", "926", "927", "928", "929"};
+String [] hour7 = {"930", "931", "932", "933", "934"};
+String [] hour8 = {"935", "936", "937", "938", "939"};
+String [] hour9 = {"940", "941", "942", "943", "944"};
+String [] hour10 = {"945", "946", "947", "948", "949", "950"};
+
+ for (int i = 0; i<locationids.length; i++)
 
 	{
-		loc.setLocation_id(location_id);
-		String [] hour = {"900", "901", "902", "903", "904", "905", "906", "907", "908", "909", "910"};
+		//loc.setLocation_id(location_id + i);
+		
+		String [] hour = null;
+			
+		
+	
+		
+		if(locationids[i] == 95111) { hour = hour1;}
+		if(locationids[i] == 95112) { hour = hour2;}
+		if(locationids[i] == 95113) { hour = hour3;}
+		if(locationids[i] == 95114) { hour = hour4;}
+		if(locationids[i] == 95120) { hour = hour5;}
+		if(locationids[i] == 95116) { hour = hour6;}
+		if(locationids[i] == 95053) { hour = hour7;}
+		if(locationids[i] == 95119) { hour = hour8;}
+		if(locationids[i] == 95126) { hour = hour9;}
+		if(locationids[i] == 95115) { hour = hour10;}
 		
 		
 			loc.sethour_0(hour);
@@ -262,7 +350,7 @@ int location_id = 95112;
 			loc.sethour_23(hour);
 			
 			mongoTemplate.save(loc, "Location_Inventory");	
-			location_id += 3;
+			
 			
 	}
 		
