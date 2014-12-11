@@ -3,6 +3,7 @@ package bikeshareimpl;
 import java.util.List;
 
 
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -24,6 +25,10 @@ public class UserDAOImpl {
 	public User getObject(String id) {
 		return mongoTemplate.findOne(new Query((Criteria.where("_id").is(Integer.parseInt(id)))), User.class);
 	}
+	
+	public User getUserBasedOnEmail(String email) {
+		return mongoTemplate.findOne(new Query((Criteria.where("email").is(email.toString()))), User.class);
+	}
 
 	public List<User> getAllObjects() {
 		 return mongoTemplate.findAll(User.class);
@@ -40,7 +45,9 @@ public class UserDAOImpl {
 		mongoTemplate.updateFirst(query, Update.update("phone", user.getPhone()),"User");  
 		mongoTemplate.updateFirst(query, Update.update("address", user.getAddress()),"User");  
 		mongoTemplate.updateFirst(query, Update.update("zipcode", user.getZipcode()),"User");  
-		mongoTemplate.updateFirst(query, Update.update("name", user.getName()),"User");  
+		mongoTemplate.updateFirst(query, Update.update("name", user.getName()),"User"); 
+		mongoTemplate.updateFirst(query, Update.update("credits_earned", user.getCredits_earned()),"User");
+		
 	}
 
 }

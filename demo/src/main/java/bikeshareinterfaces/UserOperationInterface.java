@@ -11,4 +11,8 @@ public interface UserOperationInterface {
 	
 	public UserDTO getUser(String user_id);
 	
+	public boolean checkUniqueUsername(String user_name);
+	
+	public boolean checkUniqueEmail(String email);
+	
 }

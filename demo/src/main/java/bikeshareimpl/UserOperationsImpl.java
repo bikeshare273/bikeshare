@@ -90,5 +90,35 @@ public class UserOperationsImpl implements UserOperationInterface{
 		}
 		return userDTO;
 	}
+
+	@Override
+	public boolean checkUniqueUsername(String user_name) {
+		boolean isValidUsername = false;
+		try{
+			Login logindao = loginDaoImpl.getUserBasedOnUsername(user_name);
+			System.out.println(logindao);
+			if(logindao == null){
+				isValidUsername = true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return isValidUsername;
+	}
+	
+	@Override
+	public boolean checkUniqueEmail(String email) {
+		boolean isValidUseremail = false;
+		try{
+			User userdao = userDaoImpl.getUserBasedOnEmail(email);
+			System.out.println(email+" email "+userdao);
+			if(userdao == null){
+				isValidUseremail = true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return isValidUseremail;
+	}
 	
 }

@@ -30,6 +30,7 @@ public class AuthInterfaceImpl implements AuthInterface{
 				loginDaoImpl.updateObject(login);
 				//set session id in header
 				loginDTO.setSessionId(Integer.toString(sessionId));
+				loginDTO.setUser_id(login.getUser_id());
 				loginDTO.setMessage("Login Sucessfully");
 			}
 		}catch(IllegalAccessException e){

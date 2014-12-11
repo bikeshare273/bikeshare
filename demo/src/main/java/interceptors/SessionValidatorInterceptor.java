@@ -40,6 +40,7 @@ public class SessionValidatorInterceptor implements HandlerInterceptor{
 		if(cookies != null){
 			Map<String,String> coockieMap = BikeShareUtil.getCookiesValue(cookies);
 			String username = coockieMap.get("username");
+			String user_id = coockieMap.get("user_id");
 			String sessionid = coockieMap.get("sessionid");
 			System.out.println("username "+username);
 			System.out.println("sessionid "+sessionid);

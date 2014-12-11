@@ -41,6 +41,9 @@ public class UserDTO implements Serializable{
 	private String password;
 	
 	private String[] message;
+	
+	private int credits_earned;
+	
 
 	public String[] getMessage() {
 		return message;
@@ -120,6 +123,14 @@ public class UserDTO implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getCredits_earned() {
+		return credits_earned;
+	}
+
+	public void setCredits_earned(int credits_earned) {
+		this.credits_earned = credits_earned;
 	}
 
 	
